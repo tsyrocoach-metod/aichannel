@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Какой ИИ-суперсилой ты ещё не пользуешься?</title>
+    
+    <!-- Подключение шрифта -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Подключение React и ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Подключение Babel для компиляции JSX прямо в браузере -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body { 
+            font-family: 'Manrope', sans-serif; 
+            background: #050505;
+            color: #fafafa;
+            overflow-x: hidden;
+        }
+        
+        /* Пользовательские анимации для плавности */
+        .animate-in { animation-duration: 0.5s; animation-fill-mode: forwards; }
+        .fade-in { animation-name: fadeIn; }
+        .zoom-in { animation-name: zoomIn; }
+        .slide-in-from-right { animation-name: slideInRight; }
+        
+        .duration-500 { animation-duration: 500ms; }
+        .duration-700 { animation-duration: 700ms; }
+        .duration-1000 { animation-duration: 1000ms; }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
+        }
+        @keyframes zoomIn { 
+            from { opacity: 0; transform: scale(0.95) translateY(10px); } 
+            to { opacity: 1; transform: scale(1) translateY(0); } 
+        }
+        @keyframes slideInRight { 
+            from { opacity: 0; transform: translateX(20px); } 
+            to { opacity: 1; transform: translateX(0); } 
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Встроенные SVG иконки вместо библиотеки, чтобы работало в одном файле без сборки
+        const ChevronLeft = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>;
+        const Copy = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>;
+        const Check = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>;
+        const Sparkles = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>;
+        const Brain = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 0 7 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 3.18-4.52 2.5 2.5 0 0 0-1.09-3.72 3 3 0 0 0-1.39-5.26 2.5 2.5 0 0 0-3.12-1.32 2.5 2.5 0 0 0-3-2.04Z"/><path d="M14.5 2A2.5 2.5 0 0 1 17 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-3.18-4.52 2.5 2.5 0 0 1 1.09-3.72 3 3 0 0 1 1.39-5.26 2.5 2.5 0 0 1 3.12-1.32 2.5 2.5 0 0 1 3-2.04Z"/></svg>;
+        const Layout = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>;
+        const MessageSquare = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>;
+        const Zap = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
+        const Target = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>;
+        const RotateCcw = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>;
+
+        const App = () => {
+            const [screen, setScreen] = useState('intro'); // intro, quiz, result
+            const [currentQuestion, setCurrentQuestion] = useState(0);
+            const [answers, setAnswers] = useState([]);
+            const [result, setResult] = useState(null);
+            const [copied, setCopied] = useState(false);
+
+            const quizData = [
+                {
+                id: 1,
+                q: "Утро понедельника. Впереди — неделя, полная дел. Что вы делаете?",
+                options: [
+                    { id: 'A', text: "Открываю ежедневник и раскладываю всё по дням. Без плана — каша.", scores: { structure: 2 } },
+                    { id: 'B', text: "Хватаюсь за самое горящее. Остальное — потом, по ходу.", scores: { chaos: 1, many: 1 } },
+                    { id: 'C', text: "Сначала отвечаю на все сообщения и письма. Люди ждут.", scores: { people: 2 } }
+                ]
+                },
+                {
+                id: 2,
+                q: "Вам нужно написать важный текст (пост, письмо, описание). Что сложнее всего?",
+                options: [
+                    { id: 'A', text: "Начать. Сижу перед пустым экраном и не могу выдавить первое предложение.", scores: { create: 2 } },
+                    { id: 'B', text: "Остановиться. Идей миллион, в голове хаос, всё хочется сказать сразу.", scores: { chaos: 1, create: 1 } },
+                    { id: 'C', text: "Найти правильный тон. Написать могу, но боюсь, что прозвучит не так.", scores: { people: 1, analysis: 1 } }
+                ]
+                },
+                {
+                id: 3,
+                q: "В кафе вы видите «Блюдо-сюрприз от шефа» — без описания. Ваша реакция?",
+                options: [
+                    { id: 'A', text: "Закажу! Обожаю, когда сюрприз.", scores: { chaos: 1, create: 1 } },
+                    { id: 'B', text: "Сначала спрошу у официанта хотя бы намёк на состав.", scores: { analysis: 2 } },
+                    { id: 'C', text: "Возьму проверенное. Риск в еде — не мой формат.", scores: { structure: 1, deep: 1 } }
+                ]
+                },
+                {
+                id: 4,
+                q: "Коллега прислал черновик текста и просит дать обратную связь. Ваш первый импульс?",
+                options: [
+                    { id: 'A', text: "Найти, что похвалить. Потом аккуратно предложить правки — важно не ранить.", scores: { people: 2 } },
+                    { id: 'B', text: "Открыть и сразу пометить: тут ошибка, тут нелогично, тут переписать. Быстро и по делу.", scores: { analysis: 1, many: 1 } },
+                    { id: 'C', text: "Разобрать структуру: с чего начинает, к чему ведёт, что лишнее. Думаю над общей картиной.", scores: { structure: 1, deep: 1 } }
+                ]
+                },
+                {
+                id: 5,
+                q: "Идеальный выходной — это когда вы...",
+                options: [
+                    { id: 'A', text: "Узнали что-то новое: курс, лекция, книга, мастер-класс.", scores: { analysis: 1, deep: 1 } },
+                    { id: 'B', text: "Сделали что-то руками: написали, нарисовали, приготовили, создали.", scores: { create: 2 } },
+                    { id: 'C', text: "Провели время с людьми: друзья, семья, разговоры.", scores: { people: 1, many: 1 } }
+                ]
+                },
+                {
+                id: 6,
+                q: "До дедлайна 2 дня, а проект готов на 60%. Что вы делаете?",
+                options: [
+                    { id: 'A', text: "Сажусь и методично дожимаю. Пункт за пунктом, без паники.", scores: { structure: 1, deep: 1 } },
+                    { id: 'B', text: "Параллельно делаю три вещи, переключаюсь, в итоге всё готово — но на адреналине.", scores: { many: 2 } },
+                    { id: 'C', text: "Прошу помощи или делегирую. Одна я не вывезу — и не нужно.", scores: { people: 1, chaos: 1 } }
+                ]
+                },
+                {
+                id: 7,
+                q: "Что занимает больше всего места в вашем телефоне?",
+                options: [
+                    { id: 'A', text: "Переписки. Мессенджеры, чаты, группы — миллион диалогов.", scores: { people: 1, many: 1 } },
+                    { id: 'B', text: "Заметки, списки, напоминалки. Без них я потеряюсь.", scores: { structure: 1, analysis: 1 } },
+                    { id: 'C', text: "Фото и скриншоты. Я постоянно сохраняю идеи, вдохновение, мысли.", scores: { create: 1, chaos: 1 } }
+                ]
+                },
+                {
+                id: 8,
+                q: "Если бы ИИ мог сделать за вас одну вещь прямо сейчас — что бы вы выбрали?",
+                options: [
+                    { id: 'A', text: "Разгрести завалы: письма, задачи, планирование — всё, что копится.", scores: { structure: 1, many: 1 } },
+                    { id: 'B', text: "Написать то, что я давно откладываю: пост, статью, письмо, презентацию.", scores: { create: 2 } },
+                    { id: 'C', text: "Разобраться в теме, на которую вечно не хватает времени: изучить, систематизировать.", scores: { analysis: 1, deep: 1 } }
+                ]
+                }
+            ];
+
+            const profiles = [
+                {
+                id: 'generator',
+                icon: <Sparkles className="w-12 h-12" />,
+                title: "Генератор идей",
+                weights: { create: 2, chaos: 2 },
+                description: "У вас в голове постоянно роятся идеи — для постов, проектов, подарков, решений. Проблема не в том, чтобы придумать, а в том, чтобы выбрать, сформулировать и не потерять. Вы начинаете пять дел одновременно и иногда не заканчиваете ни одного — не потому что ленитесь, а потому что уже увлеклись шестым.",
+                superpower: "Ваша ИИ-суперсила: превращать хаос идей в готовый результат.",
+                life: [
+                    "Надиктуйте ИИ свои мысли голосом (поток сознания) — попросите превратить в структурированный план",
+                    "Скиньте 5 скриншотов с идеями из Pinterest и попросите объединить в концепцию подарка / интерьера / мероприятия",
+                    "«У меня день рождения мужа через 2 недели, бюджет 15 000, он любит [X] — придумай 5 необычных вариантов»"
+                ],
+                work: [
+                    "«Вот моя идея в трёх предложениях. Разверни её в план из 10 шагов»",
+                    "«Придумай 10 тем для постов на тему [X]. Не банальных — с неожиданным углом»",
+                    "«Я хочу запустить [Y]. Какие 5 вопросов я должна себе задать, прежде чем начать?»"
+                ],
+                aiRecommendation: "ChatGPT (быстрый, хорош для брейншторма)"
+                },
+                {
+                id: 'strategist',
+                icon: <Layout className="w-12 h-12" />,
+                title: "Системный стратег",
+                weights: { structure: 2, deep: 2 },
+                description: "Вы любите, когда всё разложено по полочкам. Списки — ваш язык любви. Вы тот человек, который делает таблицу в Excel для планирования отпуска. Это не занудство — это суперсила. Но иногда вы тратите 2 часа на планирование того, что можно было сделать за 30 минут.",
+                superpower: "Ваша ИИ-суперсила: автоматизировать рутину планирования и структурирования.",
+                life: [
+                    "«Составь меню на неделю: семья 4 человека, бюджет 8000 ₽, один не ест глютен. Формат — таблица + список покупок»",
+                    "«Вот мой список дел на неделю [вставить]. Расставь приоритеты и предложи, что можно убрать»",
+                    "«Составь чек-лист для сборов ребёнка в летний лагерь»"
+                ],
+                work: [
+                    "«Вот запись (заметки) с созвона [вставить]. Сделай протокол: решения, задачи, ответственные, сроки»",
+                    "«Преврати этот сумбурный текст в структурированный документ с разделами»",
+                    "«Составь шаблон еженедельного отчёта для моей команды»"
+                ],
+                aiRecommendation: "Claude (лучше работает со структурой и длинным контекстом)"
+                },
+                {
+                id: 'communicator',
+                icon: <MessageSquare className="w-12 h-12" />,
+                title: "Мастер коммуникаций",
+                weights: { people: 2, create: 1 },
+                description: "Для вас главное — люди. Вы тратите огромное количество энергии на то, чтобы правильно сформулировать мысль, не обидеть, поддержать, найти нужные слова. Вы переписываете одно сообщение три раза, потому что «вдруг прозвучит грубо». Вы — клей, который держит любой коллектив, но на это уходит всё ваше время.",
+                superpower: "Ваша ИИ-суперсила: делегировать формулировки и тональность.",
+                life: [
+                    "«Напиши вежливый, но твёрдый отказ: меня зовут на мероприятие, я не хочу идти, но не хочу обидеть»",
+                    "«Помоги сформулировать просьбу к мужу / маме / подруге. Ситуация: [описать]. Тон — тёплый, без обвинений»",
+                    "«Ребёнок получил двойку, учитель написал в чат. Помоги написать ответ — спокойный, конструктивный»"
+                ],
+                work: [
+                    "«Перепиши этот сухой экспертный текст так, чтобы он вызывал доверие и теплоту»",
+                    "«Клиент написал гневное сообщение [вставить]. Помоги ответить — с эмпатией, но без прогиба»",
+                    "«Напиши пост-знакомство для соцсетей. Я — [кто]. Тон: дружелюбный, не продающий, настоящий»"
+                ],
+                aiRecommendation: "Claude (лучше чувствует тональность и нюансы)"
+                },
+                {
+                id: 'analyst',
+                icon: <Target className="w-12 h-12" />,
+                title: "Аналитик-исследователь",
+                weights: { analysis: 2, deep: 2 },
+                description: "Вам мало поверхностного ответа — вы хотите разобраться по-настоящему. Вы тот человек, который перед покупкой пылесоса читает 20 отзывов и 3 сравнительных обзора. Это не паранойя — это вы защищаете себя от плохих решений. Но на это уходят часы.",
+                superpower: "Ваша ИИ-суперсила: глубокий анализ и обучение в 10 раз быстрее.",
+                life: [
+                    "«Объясни простым языком, что написано в этом договоре [вставить текст]. На что обратить внимание?»",
+                    "«Сравни 3 модели [пылесоса / телефона / коляски] по критериям: цена, надёжность, отзывы. Таблицей»",
+                    "«Я хочу разобраться в теме [X]. Составь мне план обучения на 2 недели по 30 минут в день»"
+                ],
+                work: [
+                    "Загрузить статью / видео в NotebookLM и задать вопросы по содержанию",
+                    "«Вот текст конкурента [вставить]. Проанализируй: сильные стороны, слабые, что я могу сделать лучше»",
+                    "«Прочитай мою статью и найди логические противоречия, слабые аргументы, повторы»"
+                ],
+                aiRecommendation: "NotebookLM (загружаете материалы — изучаете с ИИ)"
+                },
+                {
+                id: 'producer',
+                icon: <Zap className="w-12 h-12" />,
+                title: "Многозадачный продюсер",
+                weights: { many: 2, people: 1, chaos: 1 },
+                description: "Вы — центр вселенной. Не в смысле эго, а в смысле: на вас завязано всё. Дети, работа, быт, проекты, чаты, звонки. Вы жонглируете десятью мячами и думаете не «как бы ещё добавить», а «какой уронить, чтобы обошлось». Вам нужен не один помощник — вам нужна армия.",
+                superpower: "Ваша ИИ-суперсила: мгновенная помощь с любой задачей, не вставая с места.",
+                life: [
+                    "«Мне нужно за 10 минут: список продуктов на 3 ужина, идея подарка коллеге до 2000 ₽ и текст поздравления бабушке. Всё сразу, быстро»",
+                    "«Ребёнку задали доклад про Египет, 3 класс. Помоги составить — простым языком, на 5 минут выступления»",
+                    "«Что приготовить на ужин из курицы, картошки и помидоров за 20 минут?»"
+                ],
+                work: [
+                    "«У меня 5 задач [перечислить]. Расставь приоритеты и скажи, что можно делегировать»",
+                    "«Напиши 3 варианта короткого ответа на это письмо [вставить] — на выбор»",
+                    "«Сделай из этого длинного текста 3 ключевых тезиса для быстрого принятия решения»"
+                ],
+                aiRecommendation: "ChatGPT (быстрый, мобильное приложение, всегда под рукой) или Gemini"
+                },
+                {
+                id: 'expert',
+                icon: <Brain className="w-12 h-12" />,
+                title: "Тихий эксперт",
+                weights: { analysis: 2, create: 2, people: -1 },
+                description: "Вы знаете много, но редко об этом говорите. Ваша голова полна идей и знаний, но «проявляться» — писать посты, выступать, продвигать себя — это вытягивает все силы. Вы не интроверт из робости, вы просто предпочитаете глубину, а не шум. Но мир не узнает о вас, если вы молчите.",
+                superpower: "Ваша ИИ-суперсила: проявляться без насилия над собой.",
+                life: [
+                    "«Я хочу начать вести блог / канал, но не знаю о чём. Вот мои интересы [перечислить]. Предложи 5 ниш и объясни, почему каждая может сработать»",
+                    "«Напиши пост от моего лица. Я — [кто]. Хочу рассказать про [тему]. Тон — спокойный, экспертный, не кричащий»"
+                ],
+                work: [
+                    "«У меня есть экспертная статья на 3000 слов. Сделай из неё: 5 тезисов для сторис, 1 пост-выжимку и 3 заголовка для рассылки»",
+                    "«Вот мой опыт в одном абзаце [вставить]. Разверни это в описание услуги для лендинга»",
+                    "«Я провела консультацию, вот заметки [вставить]. Преврати в кейс для портфолио»"
+                ],
+                aiRecommendation: "Claude (помогает развернуть мысль в текст, чувствует стиль)"
+                }
+            ];
+
+            const extraRecommendations = {
+                structure: "Тебе также понравится: попросить ИИ превратить любой хаос в пошаговый план.",
+                create: "Тебе также понравится: использовать ИИ как соавтора для текстов и идей.",
+                people: "Тебе также понравится: просить ИИ помочь с формулировками в сложных разговорах.",
+                analysis: "Тебе также понравится: загружать материалы в NotebookLM и изучать темы с ИИ.",
+                many: "Тебе также понравится: просить ИИ делать несколько задач за один запрос — он справится.",
+                deep: "Тебе также понравится: вести длинный диалог с ИИ, углубляясь в одну тему.",
+                chaos: "Тебе также понравится: генерировать десятки гипотез за секунду, когда нужен мозговой штурм."
+            };
+
+            const handleSelect = (option) => {
+                const newAnswers = [...answers, option.scores];
+                setAnswers(newAnswers);
+                
+                if (currentQuestion < quizData.length - 1) {
+                setTimeout(() => setCurrentQuestion(currentQuestion + 1), 300);
+                } else {
+                setTimeout(() => calculateResult(newAnswers), 300);
+                }
+            };
+
+            const calculateResult = (finalAnswers) => {
+                const totalScores = { chaos: 0, structure: 0, people: 0, create: 0, analysis: 0, many: 0, deep: 0 };
+                finalAnswers.forEach(ans => {
+                Object.keys(ans).forEach(key => {
+                    totalScores[key] += ans[key];
+                });
+                });
+
+                let bestProfile = profiles[0];
+                let maxScore = -999;
+
+                profiles.forEach(p => {
+                let score = 0;
+                Object.keys(p.weights).forEach(key => {
+                    score += (totalScores[key] || 0) * p.weights[key];
+                });
+                if (score > maxScore) {
+                    maxScore = score;
+                    bestProfile = p;
+                }
+                });
+
+                let extraKey = '';
+                let extraMax = -1;
+                
+                Object.keys(totalScores).forEach(key => {
+                if (!bestProfile.weights[key] && totalScores[key] > extraMax) {
+                    extraMax = totalScores[key];
+                    extraKey = key;
+                }
+                });
+
+                const extraText = extraKey && extraRecommendations[extraKey] 
+                ? extraRecommendations[extraKey] 
+                : extraRecommendations['create'];
+
+                setResult({ ...bestProfile, extraText });
+                setScreen('result');
+            };
+
+            const copyTasks = () => {
+                const text = `Моя ИИ-Суперсила: ${result.title}\n\nПопробуй прямо сейчас:\nДЛЯ ЖИЗНИ:\n${result.life.map(t => '• ' + t).join('\n')}\n\nДЛЯ РАБОТЫ:\n${result.work.map(t => '• ' + t).join('\n')}`;
+                navigator.clipboard.writeText(text);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            const resetQuiz = () => {
+                setAnswers([]);
+                setCurrentQuestion(0);
+                setResult(null);
+                setScreen('intro');
+            };
+
+            return (
+                <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-violet-500/30">
+                <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+                    <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-600/10 blur-[120px] rounded-full"></div>
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-fuchsia-600/10 blur-[120px] rounded-full"></div>
+                </div>
+
+                <div className="relative z-10 max-w-2xl mx-auto min-h-screen flex flex-col p-4 md:p-8">
+                    
+                    {screen === 'intro' && (
+                    <div className="flex-grow flex flex-col items-center justify-center text-center space-y-8 animate-in fade-in zoom-in duration-700">
+                        <div className="w-24 h-24 rounded-3xl bg-gradient-to-tr from-violet-600 to-fuchsia-500 flex items-center justify-center shadow-2xl shadow-violet-500/20 rotate-3">
+                        <Sparkles className="w-12 h-12 text-white" />
+                        </div>
+                        <div className="space-y-4 max-w-lg">
+                        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight italic">
+                            Какой ИИ-суперсилой ты ещё не пользуешься?
+                        </h1>
+                        <p className="text-slate-400 text-lg md:text-xl leading-relaxed">
+                            Ответь на 8 жизненных ситуаций и получи персональный список задач, которые ты можешь делегировать нейросетям уже сегодня.
+                        </p>
+                        </div>
+                        <button 
+                        onClick={() => setScreen('quiz')}
+                        className="w-full max-w-md bg-gradient-to-r from-violet-600 to-fuchsia-600 py-5 rounded-2xl font-bold text-lg shadow-xl shadow-violet-500/20 active:scale-95 transition-all uppercase tracking-widest"
+                        >
+                        Начать анализ
+                        </button>
+                        <p className="text-xs text-slate-500 uppercase tracking-widest">~ 2 минуты на прохождение</p>
+                    </div>
+                    )}
+
+                    {screen === 'quiz' && (
+                    <div className="flex-grow flex flex-col pt-4 md:pt-8">
+                        <div className="mb-10 space-y-4">
+                        <div className="flex justify-between items-end">
+                            <span className="text-xs font-black tracking-widest text-violet-500 uppercase">
+                            Вопрос {currentQuestion + 1} из 8
+                            </span>
+                            <span className="text-xs font-black text-slate-500 uppercase">
+                            {Math.round(((currentQuestion + 1) / 8) * 100)}%
+                            </span>
+                        </div>
+                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                            <div 
+                            className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-500"
+                            style={{ width: `${((currentQuestion + 1) / 8) * 100}%` }}
+                            ></div>
+                        </div>
+                        </div>
+
+                        <div key={currentQuestion} className="space-y-8 animate-in slide-in-from-right duration-500 flex-grow">
+                        <h2 className="text-2xl md:text-3xl font-bold leading-relaxed italic whitespace-pre-wrap">
+                            {quizData[currentQuestion].q}
+                        </h2>
+
+                        <div className="space-y-4">
+                            {quizData[currentQuestion].options.map((opt) => (
+                            <button
+                                key={opt.id}
+                                onClick={() => handleSelect(opt)}
+                                className="w-full p-5 md:p-6 text-left rounded-3xl border border-white/5 bg-white/5 hover:bg-violet-500/10 hover:border-violet-500/30 transition-all active:scale-[0.98] group flex items-start gap-4"
+                            >
+                                <span className="flex-shrink-0 w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-xs font-black group-hover:bg-violet-500 group-hover:text-white transition-colors mt-0.5">
+                                {opt.id}
+                                </span>
+                                <span className="text-sm md:text-base font-medium text-slate-200 leading-relaxed whitespace-pre-wrap">
+                                {opt.text}
+                                </span>
+                            </button>
+                            ))}
+                        </div>
+                        </div>
+
+                        <div className="pt-8 pb-4 text-center">
+                        {currentQuestion > 0 && (
+                            <button 
+                            onClick={() => {
+                                setAnswers(answers.slice(0, -1));
+                                setCurrentQuestion(currentQuestion - 1);
+                            }}
+                            className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-white transition-colors uppercase tracking-widest"
+                            >
+                            <ChevronLeft className="w-5 h-5" /> Назад
+                            </button>
+                        )}
+                        </div>
+                    </div>
+                    )}
+
+                    {screen === 'result' && (
+                    <div className="flex-grow flex flex-col py-8 animate-in fade-in zoom-in duration-1000">
+                        <div className="text-center space-y-6 mb-10">
+                        <div className="inline-flex p-5 rounded-3xl bg-violet-500/10 border border-violet-500/20 text-violet-400 mb-2">
+                            {result.icon}
+                        </div>
+                        <div className="space-y-3">
+                            <p className="text-xs font-black tracking-[0.2em] text-violet-500 uppercase">Твоя ИИ-суперсила</p>
+                            <h2 className="text-4xl md:text-5xl font-black italic tracking-tight uppercase">{result.title}</h2>
+                        </div>
+                        <p className="text-slate-300 text-base leading-relaxed italic px-2 whitespace-pre-wrap">
+                            {result.description}
+                        </p>
+                        <div className="inline-block px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-bold">
+                            {result.superpower}
+                        </div>
+                        </div>
+
+                        <div className="space-y-8 flex-grow">
+                        
+                        <div className="space-y-4">
+                            <h3 className="text-sm font-black uppercase tracking-widest text-slate-500 px-2">Попробуй прямо сейчас (Для жизни):</h3>
+                            <div className="grid gap-3">
+                            {result.life.map((task, i) => (
+                                <div key={i} className="p-5 md:p-6 rounded-3xl border border-white/5 bg-white/5 flex gap-4 items-start group hover:bg-white/[0.07] transition-colors">
+                                <div className="w-6 h-6 flex-shrink-0 rounded-full bg-violet-500/20 flex items-center justify-center text-violet-400 text-xs font-black mt-0.5">
+                                    {i + 1}
+                                </div>
+                                <p className="text-sm md:text-base font-medium text-slate-200 leading-relaxed whitespace-pre-wrap">{task}</p>
+                                </div>
+                            ))}
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <h3 className="text-sm font-black uppercase tracking-widest text-slate-500 px-2">Для работы:</h3>
+                            <div className="grid gap-3">
+                            {result.work.map((task, i) => (
+                                <div key={i} className="p-5 md:p-6 rounded-3xl border border-white/5 bg-white/5 flex gap-4 items-start group hover:bg-white/[0.07] transition-colors">
+                                <div className="w-6 h-6 flex-shrink-0 rounded-full bg-fuchsia-500/20 flex items-center justify-center text-fuchsia-400 text-xs font-black mt-0.5">
+                                    {i + 1}
+                                </div>
+                                <p className="text-sm md:text-base font-medium text-slate-200 leading-relaxed whitespace-pre-wrap">{task}</p>
+                                </div>
+                            ))}
+                            </div>
+                        </div>
+
+                        <div className="p-6 md:p-8 rounded-3xl bg-violet-600/10 border border-violet-600/20 space-y-4">
+                            <p className="text-sm md:text-base font-bold text-white">
+                            С какой нейросети начать: <span className="text-violet-400">{result.aiRecommendation}</span>
+                            </p>
+                            <div className="h-px w-full bg-white/10"></div>
+                            <p className="text-sm leading-relaxed italic text-violet-200">
+                            {result.extraText}
+                            </p>
+                        </div>
+
+                        <div className="space-y-4 pt-6">
+                            <button onClick={copyTasks} className="w-full py-5 rounded-2xl border border-white/10 bg-white/5 font-bold text-sm hover:bg-white/10 transition-colors flex items-center justify-center gap-2 uppercase tracking-widest">
+                            {copied ? <><Check className="w-5 h-5 text-emerald-400" /> СКОПИРОВАНО</> : <><Copy className="w-5 h-5 text-violet-400" /> СКОПИРОВАТЬ ЗАДАЧИ</>}
+                            </button>
+
+                            <div className="p-8 md:p-10 rounded-[2.5rem] bg-gradient-to-br from-violet-600 to-fuchsia-600 text-center space-y-6 shadow-2xl shadow-violet-500/20 mt-8">
+                            <h3 className="text-2xl font-black italic leading-tight">Хочешь научиться использовать эту суперсилу на полную?</h3>
+                            <p className="text-base text-white/90 leading-relaxed">
+                                25 апреля — практикум «Первые шаги в ИИ» с Ириной Клейман. За 3 часа вы решите свою первую реальную задачу с помощью ИИ.
+                            </p>
+                            <button className="w-full bg-white text-violet-600 py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-slate-100 transition-colors shadow-xl">
+                                Настроить ИИ для этих задач →
+                            </button>
+                            </div>
+
+                            <button 
+                            onClick={resetQuiz}
+                            className="w-full py-5 text-sm font-bold text-slate-500 flex items-center justify-center gap-2 hover:text-white transition-colors uppercase tracking-widest"
+                            >
+                            <RotateCcw className="w-4 h-4" /> Пройти заново
+                            </button>
+                        </div>
+                        </div>
+                    </div>
+                    )}
+                </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
