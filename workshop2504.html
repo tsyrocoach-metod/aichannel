@@ -4,15 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Нейрограмотность — Ирина Клейман</title>
-    
-    <!-- Стили и шрифты -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- SDK Kinescope для управления видео -->
-    <script src="https://player.kinescope.io/latest/iframe.player.js"></script>
-
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -50,43 +44,26 @@
             background: #333;
             border-radius: 10px;
         }
-        .glow-bg {
+        .glow {
             position: fixed;
-            inset: 0;
-            overflow: hidden;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(120px);
             pointer-events: none;
             z-index: 0;
-        }
-        .glow-1 {
-            position: absolute;
-            top: -10%;
-            right: -10%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
-            filter: blur(80px);
-        }
-        .glow-2 {
-            position: absolute;
-            bottom: -10%;
-            left: -10%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
-            filter: blur(80px);
+            opacity: 0.15;
         }
     </style>
 </head>
 <body class="custom-scrollbar overflow-x-hidden">
 
-    <div class="glow-bg">
-        <div class="glow-1"></div>
-        <div class="glow-2"></div>
-    </div>
+    <div class="glow bg-purple-600 top-[-10%] right-[-10%]"></div>
+    <div class="glow bg-pink-800 bottom-[-10%] left-[-10%]"></div>
 
     <main class="relative z-10 max-w-4xl mx-auto px-6 py-12 lg:py-20">
         
-        <!-- Шапка -->
+        <!-- Заголовок -->
         <header class="mb-12">
             <div class="flex items-center gap-2 mb-4">
                 <span class="text-[10px] uppercase tracking-[0.2em] text-purple-400 font-bold bg-purple-400/10 px-3 py-1.5 rounded-full border border-purple-400/20">
@@ -97,50 +74,50 @@
                 Нейрограмотность
             </h1>
             <p class="text-xl md:text-2xl font-medium text-gray-400">
-                Практикум <span class="text-purple-400">от Ирины Клейман</span>
+                Авторский воркшоп <span class="text-purple-400">Ирины Клейман</span>
             </p>
         </header>
 
         <!-- О воркшопе -->
         <section class="mb-12">
-            <div class="card-bg rounded-[40px] p-8 md:p-12 relative overflow-hidden group">
-                <div class="flex items-center gap-4 mb-10">
+            <div class="card-bg rounded-[40px] p-8 md:p-12">
+                <div class="flex items-center gap-4 mb-8">
                     <div class="p-3 gradient-accent rounded-2xl shadow-lg shadow-purple-500/20">
                         <i data-lucide="sparkles" class="w-6 h-6 text-white"></i>
                     </div>
-                    <h2 class="text-2xl md:text-3xl font-bold">На этом воркшопе вы:</h2>
+                    <h2 class="text-2xl md:text-3xl font-bold">На этой встрече вы:</h2>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
-                    <div class="flex items-start gap-4">
-                        <div class="w-2.5 h-2.5 rounded-full bg-purple-500 mt-2.5 shrink-0 shadow-[0_0_10px_rgba(168,85,247,1)]"></div>
-                        <p class="text-gray-300 text-lg">Изучили актуальный стек AI-инструментов</p>
+                    <div class="flex items-start gap-3">
+                        <div class="w-2 h-2 rounded-full bg-purple-500 mt-2 shrink-0"></div>
+                        <p class="text-gray-300">Изучили актуальный стек AI-инструментов</p>
                     </div>
-                    <div class="flex items-start gap-4">
-                        <div class="w-2.5 h-2.5 rounded-full bg-purple-500 mt-2.5 shrink-0 shadow-[0_0_10px_rgba(168,85,247,1)]"></div>
-                        <p class="text-gray-300 text-lg">Освоили проекты и артефакты в Claude AI</p>
+                    <div class="flex items-start gap-3">
+                        <div class="w-2 h-2 rounded-full bg-purple-500 mt-2 shrink-0"></div>
+                        <p class="text-gray-300">Освоили работу с проектами в Claude AI</p>
                     </div>
-                    <div class="flex items-start gap-4">
-                        <div class="w-2.5 h-2.5 rounded-full bg-purple-500 mt-2.5 shrink-0 shadow-[0_0_10px_rgba(168,85,247,1)]"></div>
-                        <p class="text-gray-300 text-lg">Трансформировали подход к промптингу</p>
+                    <div class="flex items-start gap-3">
+                        <div class="w-2 h-2 rounded-full bg-purple-500 mt-2 shrink-0"></div>
+                        <p class="text-gray-300">Трансформировали подход к промптингу</p>
                     </div>
-                    <div class="flex items-start gap-4">
-                        <div class="w-2.5 h-2.5 rounded-full bg-purple-500 mt-2.5 shrink-0 shadow-[0_0_10px_rgba(168,85,247,1)]"></div>
-                        <p class="text-gray-300 text-lg">Создали систему собственных ИИ-ассистентов</p>
+                    <div class="flex items-start gap-3">
+                        <div class="w-2 h-2 rounded-full bg-purple-500 mt-2 shrink-0"></div>
+                        <p class="text-gray-300">Создали систему собственных ИИ-ассистентов</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Видео -->
+        <!-- Плеер -->
         <section class="mb-16">
-            <div id="player-container" class="relative aspect-video rounded-[40px] overflow-hidden bg-black border border-white/10 shadow-2xl shadow-purple-500/5">
+            <div id="video-container" class="relative aspect-video rounded-[40px] overflow-hidden bg-black border border-white/10 shadow-2xl">
+                <!-- Ссылка в формате embed -->
                 <iframe 
-                    id="kinescope-player"
-                    src="https://kinescope.io/vzcKejC5SK2pYa9nYpkrCq?api=1" 
+                    id="workshop-video"
+                    src="https://kinescope.io/embed/vzcKejC5SK2pYa9nYpkrCq" 
                     class="absolute inset-0 w-full h-full"
                     frameborder="0" 
-                    allow="autoplay; fullscreen; picture-in-picture; encrypted-media;" 
+                    allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;" 
                     allowfullscreen
                 ></iframe>
             </div>
@@ -152,125 +129,98 @@
                 <div class="p-2.5 bg-white/5 rounded-xl border border-white/10">
                     <i data-lucide="clock" class="w-5 h-5 text-purple-400"></i>
                 </div>
-                <h2 class="text-2xl font-bold">Таймкоды встречи</h2>
+                <h2 class="text-2xl font-bold">Таймкоды воркшопа</h2>
             </div>
 
             <div class="grid grid-cols-1 gap-3">
-                <button onclick="seekTo(0)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
+                <button onclick="seek(0)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
                     <div class="flex items-center gap-4 shrink-0">
                         <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500 transition-colors">
                             <i data-lucide="play" class="w-4 h-4 text-purple-400 group-hover:text-white fill-current"></i>
                         </div>
-                        <span class="font-mono text-purple-400 font-bold text-lg">00:00</span>
+                        <span class="font-mono text-purple-400 font-bold text-lg">00:00:00</span>
                     </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-lg group-hover:text-purple-300">Введение и обзор AI-инструментов</h3>
-                        <p class="text-sm text-gray-500 mt-1">00:00 - 00:15:00</p>
-                    </div>
+                    <h3 class="font-bold text-lg group-hover:text-purple-300 flex-1">Введение и обзор AI-инструментов</h3>
                 </button>
 
-                <button onclick="seekTo(900)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
+                <button onclick="seek(900)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
                     <div class="flex items-center gap-4 shrink-0">
                         <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500 transition-colors">
                             <i data-lucide="play" class="w-4 h-4 text-purple-400 group-hover:text-white fill-current"></i>
                         </div>
-                        <span class="font-mono text-purple-400 font-bold text-lg">15:00</span>
+                        <span class="font-mono text-purple-400 font-bold text-lg">00:15:00</span>
                     </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-lg group-hover:text-purple-300">Возможности Claude AI</h3>
-                        <p class="text-sm text-gray-500 mt-1">00:15:00 - 00:32:00</p>
-                    </div>
+                    <h3 class="font-bold text-lg group-hover:text-purple-300 flex-1">Возможности Claude AI</h3>
                 </button>
 
-                <button onclick="seekTo(1890)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
+                <button onclick="seek(1890)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
                     <div class="flex items-center gap-4 shrink-0">
                         <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500 transition-colors">
                             <i data-lucide="play" class="w-4 h-4 text-purple-400 group-hover:text-white fill-current"></i>
                         </div>
-                        <span class="font-mono text-purple-400 font-bold text-lg">31:30</span>
+                        <span class="font-mono text-purple-400 font-bold text-lg">00:31:30</span>
                     </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-lg group-hover:text-purple-300">Организация работы: проекты и чаты</h3>
-                        <p class="text-sm text-gray-500 mt-1">00:31:30 - 00:45:00</p>
-                    </div>
+                    <h3 class="font-bold text-lg group-hover:text-purple-300 flex-1">Организация работы: проекты и чаты</h3>
                 </button>
 
-                <button onclick="seekTo(3120)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
+                <button onclick="seek(3120)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
                     <div class="flex items-center gap-4 shrink-0">
                         <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500 transition-colors">
                             <i data-lucide="play" class="w-4 h-4 text-purple-400 group-hover:text-white fill-current"></i>
                         </div>
-                        <span class="font-mono text-purple-400 font-bold text-lg">52:00</span>
+                        <span class="font-mono text-purple-400 font-bold text-lg">00:52:00</span>
                     </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-lg group-hover:text-purple-300">Смена парадигмы мышления</h3>
-                        <p class="text-sm text-gray-500 mt-1">00:52:00 - 01:10:00</p>
-                    </div>
+                    <h3 class="font-bold text-lg group-hover:text-purple-300 flex-1">Смена парадигмы мышления</h3>
                 </button>
 
-                <button onclick="seekTo(4200)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
+                <button onclick="seek(4200)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
                     <div class="flex items-center gap-4 shrink-0">
                         <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500 transition-colors">
                             <i data-lucide="play" class="w-4 h-4 text-purple-400 group-hover:text-white fill-current"></i>
                         </div>
                         <span class="font-mono text-purple-400 font-bold text-lg">01:10:00</span>
                     </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-lg group-hover:text-purple-300">Создание специализированных ассистентов</h3>
-                        <p class="text-sm text-gray-500 mt-1">01:10:00 - 01:25:00</p>
-                    </div>
+                    <h3 class="font-bold text-lg group-hover:text-purple-300 flex-1">Создание специализированных ассистентов</h3>
                 </button>
 
-                <button onclick="seekTo(6000)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
+                <button onclick="seek(6000)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
                     <div class="flex items-center gap-4 shrink-0">
                         <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500 transition-colors">
                             <i data-lucide="play" class="w-4 h-4 text-purple-400 group-hover:text-white fill-current"></i>
                         </div>
                         <span class="font-mono text-purple-400 font-bold text-lg">01:40:00</span>
                     </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-lg group-hover:text-purple-300">Практические открытия участников</h3>
-                        <p class="text-sm text-gray-500 mt-1">01:40:00 - 01:50:00</p>
-                    </div>
+                    <h3 class="font-bold text-lg group-hover:text-purple-300 flex-1">Практические открытия участников</h3>
                 </button>
 
-                <button onclick="seekTo(7200)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
+                <button onclick="seek(7200)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
                     <div class="flex items-center gap-4 shrink-0">
                         <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500 transition-colors">
                             <i data-lucide="play" class="w-4 h-4 text-purple-400 group-hover:text-white fill-current"></i>
                         </div>
                         <span class="font-mono text-purple-400 font-bold text-lg">02:00:00</span>
                     </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-lg group-hover:text-purple-300">Создание артефактов в Claude</h3>
-                        <p class="text-sm text-gray-500 mt-1">02:00:00 - 02:40:00</p>
-                    </div>
+                    <h3 class="font-bold text-lg group-hover:text-purple-300 flex-1">Создание артефактов в Claude</h3>
                 </button>
 
-                <button onclick="seekTo(8400)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
+                <button onclick="seek(8400)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
                     <div class="flex items-center gap-4 shrink-0">
                         <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500 transition-colors">
                             <i data-lucide="play" class="w-4 h-4 text-purple-400 group-hover:text-white fill-current"></i>
                         </div>
                         <span class="font-mono text-purple-400 font-bold text-lg">02:20:00</span>
                     </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-lg group-hover:text-purple-300">Технические инструменты и лайфхаки</h3>
-                        <p class="text-sm text-gray-500 mt-1">02:20:00 - 02:45:00</p>
-                    </div>
+                    <h3 class="font-bold text-lg group-hover:text-purple-300 flex-1">Технические инструменты и лайфхаки</h3>
                 </button>
-                
-                <button onclick="seekTo(10200)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
+
+                <button onclick="seek(10200)" class="timeline-item card-bg rounded-3xl p-6 text-left flex flex-col md:flex-row md:items-center gap-6 group">
                     <div class="flex items-center gap-4 shrink-0">
                         <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500 transition-colors">
                             <i data-lucide="play" class="w-4 h-4 text-purple-400 group-hover:text-white fill-current"></i>
                         </div>
                         <span class="font-mono text-purple-400 font-bold text-lg">02:50:00</span>
                     </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-lg group-hover:text-purple-300">Завершение и выводы</h3>
-                        <p class="text-sm text-gray-500 mt-1">02:50:00 - 03:05:18</p>
-                    </div>
+                    <h3 class="font-bold text-lg group-hover:text-purple-300 flex-1">Завершение и выводы</h3>
                 </button>
             </div>
         </section>
@@ -278,22 +228,24 @@
         <!-- Материалы -->
         <section class="mb-20">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Конспект -->
                 <div class="card-bg rounded-[40px] p-8 flex flex-col items-center text-center group hover:border-purple-500/30 transition-all">
                     <div class="w-16 h-16 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6">
                         <i data-lucide="file-text" class="w-8 h-8 text-purple-400"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3">Конспект встречи</h3>
-                    <p class="text-gray-500 text-sm mb-8">Краткое содержание тезисов и ссылки.</p>
-                    <button class="mt-auto w-full py-4 gradient-accent rounded-2xl font-bold text-sm shadow-lg shadow-purple-500/20 hover:scale-[1.02] transition-transform active:scale-95">Открыть конспект</button>
+                    <p class="text-gray-500 text-sm mb-8 leading-relaxed">Все ключевые тезисы и ссылки в одном документе.</p>
+                    <button class="w-full py-4 gradient-accent rounded-2xl font-bold text-sm shadow-lg shadow-purple-500/20 hover:scale-[1.02] transition-transform active:scale-95">Открыть конспект</button>
                 </div>
 
+                <!-- Презентация -->
                 <div class="card-bg rounded-[40px] p-8 flex flex-col items-center text-center group hover:border-purple-500/30 transition-all">
                     <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6">
                         <i data-lucide="presentation" class="w-8 h-8 text-purple-400"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">Презентация</h3>
-                    <p class="text-gray-500 text-sm mb-8">Слайды и примеры из воркшопа.</p>
-                    <button class="mt-auto w-full py-4 bg-white/5 border border-white/10 rounded-2xl font-bold text-sm hover:bg-white/10 transition-colors active:scale-95">Скачать PDF</button>
+                    <h3 class="text-xl font-bold mb-3 text-white">Презентация</h3>
+                    <p class="text-gray-500 text-sm mb-8 leading-relaxed">Слайды, схемы и примеры промптов из эфира.</p>
+                    <button class="w-full py-4 bg-white/5 border border-white/10 rounded-2xl font-bold text-sm hover:bg-white/10 transition-colors active:scale-95">Скачать PDF</button>
                 </div>
             </div>
         </section>
@@ -304,224 +256,22 @@
     </main>
 
     <script>
-        // Инициализация иконок
         lucide.createIcons();
 
-        let kinescopePlayerInstance = null;
-
-        // Инициализация плеера через SDK с более надежным методом
-        window.addEventListener('load', function() {
-            const playerEl = document.getElementById('kinescope-player');
-            if (window.Kinescope && window.Kinescope.IframePlayer && playerEl) {
-                // Используем DOM-элемент напрямую вместо ID строки для избежания ошибок деструктуризации
-                window.Kinescope.IframePlayer.create(playerEl).then(function (p) {
-                    kinescopePlayerInstance = p;
-                    console.log('Kinescope Player Connected');
-                }).catch(function(e) {
-                    console.warn('SDK create error, falling back to message proxy:', e);
-                });
+        function seek(seconds) {
+            const video = document.getElementById('workshop-video');
+            if (video && video.contentWindow) {
+                // Прямая отправка команды через postMessage (формат для embed)
+                video.contentWindow.postMessage(JSON.stringify({ command: 'seek', value: seconds }), '*');
+                video.contentWindow.postMessage(JSON.stringify({ command: 'play' }), '*');
             }
-        });
 
-        // Универсальная функция перемотки
-        function seekTo(seconds) {
-            console.log('Navigating to:', seconds);
-            
-            // Метод 1: Через инициализированный SDK
-            if (kinescopePlayerInstance && typeof kinescopePlayerInstance.seek === 'function') {
-                kinescopePlayerInstance.seek(seconds);
-                kinescopePlayerInstance.play().catch(() => {});
-            } 
-            
-            // Метод 2: Прямой postMessage (самый стабильный fallback)
-            const iframe = document.getElementById('kinescope-player');
-            if (iframe && iframe.contentWindow) {
-                // Пробуем несколько форматов команд Kinescope
-                const seekMsg = JSON.stringify({ command: 'seek', value: seconds });
-                const seekMsg2 = JSON.stringify({ type: 'seek', data: { time: seconds } });
-                
-                iframe.contentWindow.postMessage(seekMsg, '*');
-                iframe.contentWindow.postMessage(seekMsg2, '*');
-                
-                // Форсируем запуск
-                iframe.contentWindow.postMessage(JSON.stringify({ command: 'play' }), '*');
-            }
-            
-            // Плавный скролл к видео
-            document.getElementById('player-container').scrollIntoView({ 
+            // Плавный скролл к плееру
+            document.getElementById('video-container').scrollIntoView({ 
                 behavior: 'smooth', 
                 block: 'center' 
             });
         }
     </script>
 </body>
-</html>        value: seconds
-      }), '*');
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-[#0D0D0D] text-white font-sans selection:bg-purple-500/30">
-      {/* Background Glow */}
-      <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full"></div>
-        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-violet-800/10 blur-[120px] rounded-full"></div>
-      </div>
-
-      <main className="relative z-10 max-w-4xl mx-auto px-6 py-12 lg:py-20">
-        
-        {/* Header */}
-        <header className="mb-12 animate-in fade-in slide-in-from-top-4 duration-700">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-[10px] uppercase tracking-[0.2em] text-purple-400 font-bold bg-purple-400/10 px-2 py-1 rounded">
-              Запись воркшопа №1
-            </span>
-          </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-purple-200">
-            Нейрограмотность
-          </h1>
-          <p className="text-xl md:text-2xl font-medium text-gray-400">
-            Практикум <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">от Ирины Клейман</span>
-          </p>
-        </header>
-
-        {/* Intro Card */}
-        <section className="mb-12">
-          <div className="bg-[#161616] border border-white/5 rounded-3xl p-6 md:p-8 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-              <Lightbulb size={120} className="text-purple-500" />
-            </div>
-            
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-gradient-to-br from-purple-500 to-violet-600 rounded-xl shadow-[0_0_15px_rgba(168,85,247,0.4)]">
-                <BookOpen size={20} className="text-white" />
-              </div>
-              <h2 className="text-xl font-bold">На этом воркшопе вы:</h2>
-            </div>
-
-            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-400">
-              {[
-                "Изучили актуальный стек AI-инструментов",
-                "Освоили продвинутые функции Claude AI",
-                "Трансформировали подход к промптингу",
-                "Создали архитектуру личных ассистентов"
-              ].map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-2.5 shrink-0" />
-                  <span className="text-sm leading-relaxed">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* Video Player Section */}
-        <section className="mb-16">
-          <div className="relative aspect-video rounded-3xl overflow-hidden bg-black border border-white/10 shadow-2xl shadow-purple-500/5 group">
-            <iframe 
-              ref={playerRef}
-              src="https://kinescope.io/vzcKejC5SK2pYa9nYpkrCq" 
-              className="absolute inset-0 w-full h-full"
-              frameBorder="0" 
-              allow="autoplay; fullscreen; picture-in-picture; encrypted-media;" 
-              allowFullScreen
-            ></iframe>
-          </div>
-        </section>
-
-        {/* Timeline Section */}
-        <section className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="p-2 bg-white/5 rounded-xl border border-white/10">
-              <Clock size={20} className="text-purple-400" />
-            </div>
-            <h2 className="text-2xl font-bold">Таймлайн видео</h2>
-          </div>
-
-          <div className="space-y-3">
-            {timecodes.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => seekTo(item.seconds)}
-                className={`w-full text-left p-4 rounded-2xl border transition-all duration-300 group flex items-center gap-4 ${
-                  activeTime === item.seconds 
-                  ? 'bg-purple-500/10 border-purple-500/50' 
-                  : 'bg-[#161616] border-white/5 hover:border-purple-500/30'
-                }`}
-              >
-                <div className={`p-2 rounded-lg transition-colors ${
-                  activeTime === item.seconds ? 'bg-purple-500 text-white' : 'bg-white/5 text-gray-500 group-hover:text-purple-400'
-                }`}>
-                  <Play size={16} fill={activeTime === item.seconds ? "currentColor" : "none"} />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between gap-2 mb-0.5">
-                    <span className={`font-mono text-sm font-bold ${activeTime === item.seconds ? 'text-purple-400' : 'text-purple-500/80'}`}>
-                      {item.time}
-                    </span>
-                    <span className="text-[10px] text-gray-600 uppercase tracking-widest font-bold">Перейти</span>
-                  </div>
-                  <h3 className="font-bold text-white mb-1">{item.title}</h3>
-                  <p className="text-xs text-gray-500 line-clamp-1">{item.desc}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* Materials Section */}
-        <section className="mb-20">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="p-2 bg-white/5 rounded-xl border border-white/10">
-              <Sparkles size={20} className="text-purple-400" />
-            </div>
-            <h2 className="text-2xl font-bold">Материалы к воркшопу</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Summary Card */}
-            <div className="bg-[#161616] border border-white/5 rounded-3xl p-8 flex flex-col items-center text-center group hover:border-purple-500/30 transition-all cursor-pointer">
-              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                <FileText size={32} className="text-purple-400" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Конспект встречи</h3>
-              <p className="text-gray-500 text-sm mb-8 leading-relaxed">
-                Краткое содержание всех ключевых тезисов, нейросетей и методик, упомянутых в эфире.
-              </p>
-              <button className="mt-auto w-full py-4 bg-gradient-to-r from-purple-600 to-violet-600 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-[0_10px_20px_-10px_rgba(139,92,246,0.3)] hover:shadow-purple-500/40 hover:-translate-y-1 transition-all">
-                Открыть конспект
-                <ExternalLink size={16} />
-              </button>
-            </div>
-
-            {/* Presentation Card */}
-            <div className="bg-[#161616] border border-white/5 rounded-3xl p-8 flex flex-col items-center text-center group hover:border-purple-500/30 transition-all cursor-pointer">
-              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                <Presentation size={32} className="text-purple-400" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Презентация</h3>
-              <p className="text-gray-500 text-sm mb-8 leading-relaxed">
-                Визуальные материалы, схемы и примеры промптов, которые Ирина показывала на встрече.
-              </p>
-              <button className="mt-auto w-full py-4 bg-white/5 hover:bg-white/10 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border border-white/10 transition-all">
-                Скачать PDF
-                <ExternalLink size={16} />
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="text-center py-12 border-t border-white/5">
-          <p className="text-gray-600 text-sm mb-2">© 2026 Нейрограмотность Ирины Клейман</p>
-          <div className="flex justify-center gap-6">
-            <a href="#" className="text-gray-500 hover:text-purple-400 transition-colors text-xs uppercase tracking-widest font-bold">Поддержка</a>
-            <a href="#" className="text-gray-500 hover:text-purple-400 transition-colors text-xs uppercase tracking-widest font-bold">Канал Ирины</a>
-          </div>
-        </footer>
-      </main>
-    </div>
-  );
-};
-
-export default App;
+</html>
