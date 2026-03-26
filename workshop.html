@@ -1,0 +1,206 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  Play, 
+  BookOpen, 
+  Layout, 
+  Clock, 
+  ExternalLink, 
+  Sparkles, 
+  Lightbulb,
+  FileText,
+  Presentation
+} from 'lucide-react';
+
+const App = () => {
+  const playerRef = useRef(null);
+  const [activeTime, setActiveTime] = useState(null);
+
+  // Список таймкодов
+  const timecodes = [
+    { time: "00:00", seconds: 0, title: "Введение и обзор AI-инструментов", desc: "Актуальный ландшафт нейросетей на текущий момент." },
+    { time: "15:00", seconds: 900, title: "Возможности Claude AI", desc: "Почему это основной инструмент для глубокой работы." },
+    { time: "31:30", seconds: 1890, title: "Организация работы: проекты и чаты", desc: "Как не утонуть в хаосе и структурировать базу знаний." },
+    { time: "52:00", seconds: 3120, title: "Смена парадигмы мышления", desc: "Главный секрет эффективного промптинга." },
+    { time: "01:10:00", seconds: 4200, title: "Создание специализированных ассистентов", desc: "Инструкция по сборке персонализированных помощников." },
+    { time: "01:40:00", seconds: 6000, title: "Практические открытия участников", desc: "Разбор живых кейсов и инсайтов." },
+    { time: "02:00:00", seconds: 7200, title: "Создание артефактов в Claude", desc: "Демонстрация работы с кодом, документами и визуалом." },
+    { time: "02:20:00", seconds: 8400, title: "Технические инструменты и лайфхаки", desc: "Тонкие настройки для профессионального использования." },
+    { time: "02:50:00", seconds: 10200, title: "Завершение и выводы", desc: "Финальное напутствие и стратегия внедрения ИИ." }
+  ];
+
+  // Функция для перемотки видео (используем postMessage для Kinescope)
+  const seekTo = (seconds) => {
+    setActiveTime(seconds);
+    if (playerRef.current) {
+      playerRef.current.contentWindow.postMessage(JSON.stringify({
+        command: 'seek',
+        value: seconds
+      }), '*');
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0D0D0D] text-white font-sans selection:bg-purple-500/30">
+      {/* Background Glow */}
+      <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-violet-800/10 blur-[120px] rounded-full"></div>
+      </div>
+
+      <main className="relative z-10 max-w-4xl mx-auto px-6 py-12 lg:py-20">
+        
+        {/* Header */}
+        <header className="mb-12 animate-in fade-in slide-in-from-top-4 duration-700">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-purple-400 font-bold bg-purple-400/10 px-2 py-1 rounded">
+              Запись воркшопа №1
+            </span>
+          </div>
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-purple-200">
+            Нейрограмотность
+          </h1>
+          <p className="text-xl md:text-2xl font-medium text-gray-400">
+            Практикум <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">от Ирины Клейман</span>
+          </p>
+        </header>
+
+        {/* Intro Card */}
+        <section className="mb-12">
+          <div className="bg-[#161616] border border-white/5 rounded-3xl p-6 md:p-8 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+              <Lightbulb size={120} className="text-purple-500" />
+            </div>
+            
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-br from-purple-500 to-violet-600 rounded-xl shadow-[0_0_15px_rgba(168,85,247,0.4)]">
+                <BookOpen size={20} className="text-white" />
+              </div>
+              <h2 className="text-xl font-bold">На этом воркшопе вы:</h2>
+            </div>
+
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-400">
+              {[
+                "Изучили актуальный стек AI-инструментов",
+                "Освоили продвинутые функции Claude AI",
+                "Трансформировали подход к промптингу",
+                "Создали архитектуру личных ассистентов"
+              ].map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-2.5 shrink-0" />
+                  <span className="text-sm leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* Video Player Section */}
+        <section className="mb-16">
+          <div className="relative aspect-video rounded-3xl overflow-hidden bg-black border border-white/10 shadow-2xl shadow-purple-500/5 group">
+            <iframe 
+              ref={playerRef}
+              src="https://kinescope.io/vzcKejC5SK2pYa9nYpkrCq" 
+              className="absolute inset-0 w-full h-full"
+              frameBorder="0" 
+              allow="autoplay; fullscreen; picture-in-picture; encrypted-media;" 
+              allowFullScreen
+            ></iframe>
+          </div>
+        </section>
+
+        {/* Timeline Section */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="p-2 bg-white/5 rounded-xl border border-white/10">
+              <Clock size={20} className="text-purple-400" />
+            </div>
+            <h2 className="text-2xl font-bold">Таймлайн видео</h2>
+          </div>
+
+          <div className="space-y-3">
+            {timecodes.map((item, index) => (
+              <button
+                key={index}
+                onClick={() => seekTo(item.seconds)}
+                className={`w-full text-left p-4 rounded-2xl border transition-all duration-300 group flex items-center gap-4 ${
+                  activeTime === item.seconds 
+                  ? 'bg-purple-500/10 border-purple-500/50' 
+                  : 'bg-[#161616] border-white/5 hover:border-purple-500/30'
+                }`}
+              >
+                <div className={`p-2 rounded-lg transition-colors ${
+                  activeTime === item.seconds ? 'bg-purple-500 text-white' : 'bg-white/5 text-gray-500 group-hover:text-purple-400'
+                }`}>
+                  <Play size={16} fill={activeTime === item.seconds ? "currentColor" : "none"} />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between gap-2 mb-0.5">
+                    <span className={`font-mono text-sm font-bold ${activeTime === item.seconds ? 'text-purple-400' : 'text-purple-500/80'}`}>
+                      {item.time}
+                    </span>
+                    <span className="text-[10px] text-gray-600 uppercase tracking-widest font-bold">Перейти</span>
+                  </div>
+                  <h3 className="font-bold text-white mb-1">{item.title}</h3>
+                  <p className="text-xs text-gray-500 line-clamp-1">{item.desc}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Materials Section */}
+        <section className="mb-20">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="p-2 bg-white/5 rounded-xl border border-white/10">
+              <Sparkles size={20} className="text-purple-400" />
+            </div>
+            <h2 className="text-2xl font-bold">Материалы к воркшопу</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Summary Card */}
+            <div className="bg-[#161616] border border-white/5 rounded-3xl p-8 flex flex-col items-center text-center group hover:border-purple-500/30 transition-all cursor-pointer">
+              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                <FileText size={32} className="text-purple-400" />
+              </div>
+              <h3 className="text-xl font-bold mb-3">Конспект встречи</h3>
+              <p className="text-gray-500 text-sm mb-8 leading-relaxed">
+                Краткое содержание всех ключевых тезисов, нейросетей и методик, упомянутых в эфире.
+              </p>
+              <button className="mt-auto w-full py-4 bg-gradient-to-r from-purple-600 to-violet-600 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-[0_10px_20px_-10px_rgba(139,92,246,0.3)] hover:shadow-purple-500/40 hover:-translate-y-1 transition-all">
+                Открыть конспект
+                <ExternalLink size={16} />
+              </button>
+            </div>
+
+            {/* Presentation Card */}
+            <div className="bg-[#161616] border border-white/5 rounded-3xl p-8 flex flex-col items-center text-center group hover:border-purple-500/30 transition-all cursor-pointer">
+              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                <Presentation size={32} className="text-purple-400" />
+              </div>
+              <h3 className="text-xl font-bold mb-3">Презентация</h3>
+              <p className="text-gray-500 text-sm mb-8 leading-relaxed">
+                Визуальные материалы, схемы и примеры промптов, которые Ирина показывала на встрече.
+              </p>
+              <button className="mt-auto w-full py-4 bg-white/5 hover:bg-white/10 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border border-white/10 transition-all">
+                Скачать PDF
+                <ExternalLink size={16} />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="text-center py-12 border-t border-white/5">
+          <p className="text-gray-600 text-sm mb-2">© 2026 Нейрограмотность Ирины Клейман</p>
+          <div className="flex justify-center gap-6">
+            <a href="#" className="text-gray-500 hover:text-purple-400 transition-colors text-xs uppercase tracking-widest font-bold">Поддержка</a>
+            <a href="#" className="text-gray-500 hover:text-purple-400 transition-colors text-xs uppercase tracking-widest font-bold">Канал Ирины</a>
+          </div>
+        </footer>
+      </main>
+    </div>
+  );
+};
+
+export default App;
