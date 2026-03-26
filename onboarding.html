@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Нейрограмотность | Онбординг</title>
+    <title>Нейрограмотность | Дашборд</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -11,298 +11,394 @@
             font-family: 'Manrope', sans-serif; 
             background: #050505;
             color: #fafafa;
-            overflow: hidden; /* Фиксируем экран для эффекта приложения */
+            overflow-x: hidden;
         }
         .bg-glow {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: 
-                radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(217, 70, 239, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 10% 10%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(217, 70, 239, 0.08) 0%, transparent 40%);
             z-index: -1;
         }
         .glass-card {
-            background: rgba(20, 20, 25, 0.8);
+            background: rgba(20, 20, 25, 0.85);
             backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
         }
-        .btn-next {
+        .btn-primary {
             background: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .btn-next:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.4); }
-        .btn-back { border: 1px solid rgba(255, 255, 255, 0.1); }
-        .btn-back:hover { background: rgba(255, 255, 255, 0.05); }
+        .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.4); }
+        .btn-primary:disabled { opacity: 0.3; transform: none; filter: grayscale(1); }
         
-        .card-enter {
-            animation: cardEnter 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        .ai-card {
+            transition: all 0.3s ease;
+            position: relative;
         }
-        @keyframes cardEnter {
-            from { opacity: 0; transform: translateY(30px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        .ai-card:not(.completed):hover { border-color: rgba(139, 92, 246, 0.5); transform: translateY(-4px); }
+        .ai-card.completed { border-color: #10b981 !important; background: rgba(16, 185, 129, 0.1); cursor: default; }
+        
+        .status-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            padding: 4px;
+            display: none;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
         }
+        .completed .status-badge { display: block; }
 
-        .progress-line {
-            transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 1.5rem;
+        }
+        .details-content.open {
+            max-height: 2000px;
+            margin-top: 1rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .img-tip {
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-align: center;
+            background: rgba(0,0,0,0.3);
+        }
+        .step-num {
+            background: linear-gradient(135deg, #7c3aed, #d946ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
     <div class="bg-glow"></div>
 
-    <!-- Main Container -->
     <div class="w-full max-w-xl">
         
-        <!-- STEP 0: WELCOME SPLASH -->
-        <div id="step-0" class="glass-card rounded-[3rem] p-10 text-center card-enter">
+        <!-- SCREEN 0: WELCOME -->
+        <div id="screen-welcome" class="glass-card rounded-[3rem] p-10 text-center fade-in">
             <div class="mb-8 flex justify-center">
-                <div class="relative">
-                    <div class="absolute inset-0 bg-violet-500 blur-2xl opacity-20 animate-pulse"></div>
-                    <div class="relative w-24 h-24 rounded-3xl bg-gradient-to-tr from-violet-600 to-fuchsia-500 flex items-center justify-center shadow-2xl">
-                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-                    </div>
+                <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-violet-600 to-fuchsia-500 flex items-center justify-center shadow-2xl">
+                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
             </div>
-            <h1 class="text-3xl md:text-4xl font-extrabold mb-4 leading-tight">
-                Практикум <br> «Нейрограмотность» <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 font-black italic">от Ирины Клейман</span>
+            <h1 class="text-3xl font-extrabold mb-4 leading-tight italic">
+                Практикум «Нейрограмотность» <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 font-black">от Ирины Клейман</span>
             </h1>
-            <p class="text-slate-400 text-lg mb-10 leading-relaxed px-4">
-                Давайте настроим основные нейросети, которыми мы будем пользоваться на встрече.
+            <p class="text-slate-400 text-lg mb-10 leading-relaxed">
+                Давайте настроим наших основных помощников, которыми мы будем пользоваться на встрече.
             </p>
-            <button onclick="goToStep(1)" class="btn-next w-full py-5 rounded-2xl font-bold text-lg shadow-lg">Настроить нейросети</button>
+            <button onclick="showScreen('screen-location')" class="btn-primary w-full py-5 rounded-2xl font-bold text-lg">Настроить нейросети</button>
         </div>
 
-        <!-- WORKFLOW STEPS -->
-        <div id="workflow" class="hidden">
-            <!-- Progress Header -->
-            <div class="px-6 mb-6">
-                <div class="flex justify-between items-end mb-2">
-                    <button onclick="goBack()" class="text-xs font-semibold text-slate-500 hover:text-white transition-colors flex items-center gap-1">
-                        ← НАЗАД
-                    </button>
-                    <span id="progress-text" class="text-[10px] font-black tracking-widest text-violet-400">0%</span>
+        <!-- SCREEN 1: LOCATION -->
+        <div id="screen-location" class="hidden glass-card rounded-[3rem] p-10 fade-in text-center">
+            <h2 class="text-2xl font-bold mb-8 italic">Где вы сейчас находитесь?</h2>
+            <div class="grid gap-4 mb-8">
+                <button onclick="setLocation('ru')" class="p-6 rounded-3xl border border-white/5 bg-white/5 hover:bg-violet-500/10 hover:border-violet-500/30 text-left transition-all group">
+                    <span class="text-xl font-bold block mb-1 group-hover:text-violet-400">🇷🇺 Я в России</span>
+                    <span class="text-xs text-slate-400 leading-relaxed italic">Покажу как обойти ограничения, настроить ВПН и СМС.</span>
+                </button>
+                <button onclick="setLocation('world')" class="p-6 rounded-3xl border border-white/5 bg-white/5 hover:bg-fuchsia-500/10 hover:border-fuchsia-500/30 text-left transition-all group">
+                    <span class="text-xl font-bold block mb-1 group-hover:text-fuchsia-400">🌍 В другой стране</span>
+                    <span class="text-xs text-slate-400 italic">Прямой доступ к сервисам через вашу Google-почту.</span>
+                </button>
+            </div>
+            <p class="text-[10px] text-slate-500 leading-relaxed px-4 italic">
+                *Если вы находитесь в Беларуси, Китае, Иране — пожалуйста, выбирайте путь "Я в России", так как в этих странах доступ к нейросетям также ограничен.
+            </p>
+        </div>
+
+        <!-- SCREEN 2: DASHBOARD (HUB) -->
+        <div id="screen-dashboard" class="hidden fade-in">
+            <div class="flex justify-between items-end mb-8 px-4">
+                <div>
+                    <h2 class="text-2xl font-black italic uppercase tracking-tight">Ваши Помощники</h2>
+                    <p class="text-xs text-slate-500">Нажмите на иконку для начала настройки</p>
                 </div>
-                <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                    <div id="progress-bar" class="progress-line h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 w-0"></div>
+                <div class="bg-violet-500/10 px-4 py-2 rounded-2xl border border-violet-500/20">
+                    <span id="overall-progress" class="text-xl font-black text-violet-400">0%</span>
                 </div>
             </div>
 
-            <!-- Card Container -->
-            <div class="glass-card rounded-[2.5rem] p-8 md:p-10 min-h-[460px] flex flex-col relative overflow-hidden">
-                
-                <!-- STEP 1: TOOLS INFO -->
-                <div id="step-content-1" class="step-card hidden card-enter">
-                    <div class="mb-8">
-                        <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest">Инструменты</span>
-                        <h2 class="text-2xl font-bold mt-1">Что мы будем использовать?</h2>
-                    </div>
-                    
-                    <p class="text-slate-400 text-sm mb-8 leading-relaxed">
-                        Нам понадобятся две мощные нейросети. Вам будет <b>вполне достаточно их бесплатных версий</b> для всех заданий практикума.
-                    </p>
-
-                    <div class="grid grid-cols-2 gap-4 mb-8">
-                        <div class="p-5 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center text-center">
-                            <div class="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold mb-3 text-xl">G</div>
-                            <span class="text-sm font-bold">Gemini</span>
-                            <span class="text-[10px] text-slate-500 mt-1 italic">от Google</span>
-                        </div>
-                        <div class="p-5 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center text-center">
-                            <div class="w-12 h-12 rounded-xl bg-[#D97757]/20 text-[#D97757] flex items-center justify-center font-bold mb-3 text-xl">C</div>
-                            <span class="text-sm font-bold">Claude</span>
-                            <span class="text-[10px] text-slate-500 mt-1 italic">от Anthropic</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-auto">
-                        <button onclick="goToStep(2)" class="btn-next w-full py-4 rounded-2xl font-bold">Выбрать страну</button>
-                    </div>
+            <div class="grid grid-cols-2 gap-4 mb-10">
+                <div onclick="startFlow('chatgpt')" id="card-chatgpt" class="ai-card glass-card rounded-[2rem] p-6 flex flex-col items-center border border-white/5 cursor-pointer">
+                    <div class="status-badge"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg></div>
+                    <div class="w-14 h-14 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center font-bold mb-4 shadow-lg text-xl">GPT</div>
+                    <span class="text-sm font-bold tracking-tight">ChatGPT</span>
                 </div>
-
-                <!-- STEP 2: LOCATION -->
-                <div id="step-content-2" class="step-card hidden card-enter">
-                    <div class="mb-8 text-center">
-                        <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest">География</span>
-                        <h2 class="text-2xl font-bold mt-1">Где вы сейчас?</h2>
-                    </div>
-                    
-                    <div class="grid gap-4 mb-8">
-                        <button onclick="setLocation('ru')" class="group p-6 rounded-3xl border border-white/5 bg-white/5 hover:bg-violet-500/10 hover:border-violet-500/30 text-left transition-all">
-                            <span class="text-xl font-bold block mb-1">🇷🇺 Я в России</span>
-                            <span class="text-xs text-slate-400 leading-relaxed">Понадобится VPN для доступа. Также доступ ограничен в Беларуси, Китае и некоторых других странах.</span>
-                        </button>
-                        <button onclick="setLocation('world')" class="group p-6 rounded-3xl border border-white/5 bg-white/5 hover:bg-fuchsia-500/10 hover:border-fuchsia-500/30 text-left transition-all">
-                            <span class="text-xl font-bold block mb-1">🌍 В другой стране</span>
-                            <span class="text-xs text-slate-400 leading-relaxed">Прямой доступ ко всем сервисам без ограничений.</span>
-                        </button>
-                    </div>
-                    
-                    <p class="text-[10px] text-slate-500 text-center">
-                        Мы определим оптимальный путь регистрации на основе вашей локации.
-                    </p>
+                <div onclick="startFlow('claude')" id="card-claude" class="ai-card glass-card rounded-[2rem] p-6 flex flex-col items-center border border-white/5 cursor-pointer">
+                    <div class="status-badge"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg></div>
+                    <div class="w-14 h-14 bg-orange-500/20 text-orange-400 rounded-2xl flex items-center justify-center font-bold mb-4 shadow-lg text-xl">C</div>
+                    <span class="text-sm font-bold tracking-tight">Claude</span>
                 </div>
-
-                <!-- STEP 3: PREPARATION -->
-                <div id="step-content-3" class="step-card hidden card-enter">
-                    <div class="mb-6">
-                        <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest">Шаг 1: Подготовка</span>
-                        <h2 class="text-2xl font-bold mt-1" id="step-3-title">Доступ и почта</h2>
-                    </div>
-                    
-                    <div class="space-y-5">
-                        <div id="vpn-block" class="p-5 rounded-2xl bg-violet-500/5 border border-violet-500/10">
-                            <p class="text-xs font-bold text-violet-300 uppercase mb-3 tracking-widest">1. Включите VPN</p>
-                            <p class="text-xs text-slate-400 mb-3">Если вы в РФ, используйте надежный VPN (локация USA/Германия):</p>
-                            <div class="flex gap-2">
-                                <a href="https://freevpnplanet.com/" target="_blank" class="px-3 py-2 bg-white/5 rounded-xl text-[10px] border border-white/10 hover:border-violet-500 transition-all underline">Planet VPN</a>
-                                <a href="https://adguard-vpn.com/" target="_blank" class="px-3 py-2 bg-white/5 rounded-xl text-[10px] border border-white/10 hover:border-violet-500 transition-all underline">AdGuard</a>
-                            </div>
-                        </div>
-
-                        <div class="p-5 rounded-2xl bg-blue-500/5 border border-blue-500/10">
-                            <p class="text-xs font-bold text-blue-300 uppercase mb-3 tracking-widest">2. Почта Google</p>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Лучше всего использовать <b>Gmail.com</b>. Это гарантирует вход "в один клик" без лишних проверок.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="mt-auto pt-6">
-                        <button onclick="goToStep(4)" class="btn-next w-full py-4 rounded-2xl font-bold italic">Всё готово</button>
-                    </div>
+                <div onclick="startFlow('gemini')" id="card-gemini" class="ai-card glass-card rounded-[2rem] p-6 flex flex-col items-center border border-white/5 cursor-pointer">
+                    <div class="status-badge"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg></div>
+                    <div class="w-14 h-14 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center font-bold mb-4 shadow-lg text-xl">G</div>
+                    <span class="text-sm font-bold tracking-tight">Gemini</span>
                 </div>
-
-                <!-- STEP 4: REGISTRATION -->
-                <div id="step-content-4" class="step-card hidden card-enter">
-                    <div class="mb-6">
-                        <span class="text-[10px] font-bold text-fuchsia-400 uppercase tracking-widest">Шаг 2: Регистрация</span>
-                        <h2 class="text-2xl font-bold mt-1">Создаем аккаунты</h2>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div class="p-5 rounded-3xl bg-white/5 border border-white/10 relative overflow-hidden group">
-                            <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg>
-                            </div>
-                            <h4 class="font-bold text-[#D97757] flex items-center gap-2 mb-2">Claude.ai</h4>
-                            <p class="text-[11px] text-slate-400 leading-relaxed mb-3">Выберите <b>"Continue with Google"</b>. Если попросит SMS:</p>
-                            <div class="bg-black/20 p-3 rounded-xl">
-                                <p class="text-[10px] text-slate-300 italic">• Спросите код у зарубежных друзей.</p>
-                                <p class="text-[10px] text-slate-300 italic">• Или возьмите номер на <a href="https://sms-activate.org" target="_blank" class="underline text-orange-400">sms-activate.org</a> (~30р).</p>
-                            </div>
-                        </div>
-
-                        <div class="p-5 rounded-3xl bg-white/5 border border-white/10">
-                            <h4 class="font-bold text-blue-400 flex items-center gap-2 mb-2">Gemini.google.com</h4>
-                            <p class="text-[11px] text-slate-400 leading-relaxed italic">
-                                Просто войдите под своим Gmail. Под VPN всё заработает мгновенно.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="mt-auto pt-6">
-                        <button onclick="goToStep(5)" class="btn-next w-full py-4 rounded-2xl font-bold">Аккаунты созданы!</button>
-                    </div>
+                <div onclick="startFlow('notebook')" id="card-notebook" class="ai-card glass-card rounded-[2rem] p-6 flex flex-col items-center border border-white/5 cursor-pointer">
+                    <div class="status-badge"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg></div>
+                    <div class="w-14 h-14 bg-slate-500/20 text-slate-300 rounded-2xl flex items-center justify-center font-bold mb-4 shadow-lg text-xl">N</div>
+                    <span class="text-sm font-bold tracking-tight">NotebookLM</span>
                 </div>
+            </div>
 
-                <!-- STEP 5: FINAL -->
-                <div id="step-content-5" class="step-card hidden card-enter text-center">
-                    <div class="mb-8">
-                        <div class="w-20 h-20 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-emerald-500/10">
-                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                        </div>
-                        <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest italic">Вы готовы</span>
-                        <h2 class="text-3xl font-black mt-2">Первый тест</h2>
-                    </div>
+            <button onclick="finishOnboarding()" id="btn-finish" disabled class="btn-primary w-full py-5 rounded-2xl font-bold text-lg opacity-50">Я готов(а) к эфиру</button>
+        </div>
 
-                    <div class="bg-violet-600/10 border border-violet-500/20 rounded-[2rem] p-6 mb-8 text-left relative group">
-                        <div class="absolute -top-3 left-6 px-3 py-1 bg-violet-600 text-[9px] font-black rounded-full text-white">ПРОМПТ ДЛЯ КОПИРОВАНИЯ</div>
-                        <p id="prompt-text" class="text-sm leading-relaxed italic text-slate-300">
-                            "Привет! Я занимаюсь <span class="text-violet-400 font-bold underline decoration-dotted">[ваша сфера: психология / дизайн / бизнес]</span>. Чем ты мне сможешь помочь прямо сейчас на основе своего опыта? Предложи 3 конкретные идеи."
-                        </p>
-                        <button onclick="copyPrompt()" class="mt-5 w-full py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-violet-600 hover:border-violet-600 transition-all">
-                            Скопировать текст
-                        </button>
-                    </div>
+        <!-- SCREEN 3: FLOW CONTAINER -->
+        <div id="screen-flow" class="hidden glass-card rounded-[3rem] p-8 md:p-10 fade-in min-h-[620px] flex flex-col relative">
+            <button onclick="backToDashboard()" class="absolute top-8 left-8 text-slate-500 hover:text-white transition-colors flex items-center gap-1 text-[10px] font-black uppercase tracking-widest">
+                ← Назад в Хаб
+            </button>
+            
+            <div class="mt-8 mb-4 text-center">
+                <h3 id="flow-title" class="text-2xl font-black italic text-violet-400">Настройка</h3>
+            </div>
 
-                    <div class="grid grid-cols-2 gap-3">
-                        <a href="https://claude.ai" target="_blank" class="py-4 border border-white/10 rounded-2xl font-bold text-xs hover:bg-white/5 transition-all">В Claude</a>
-                        <a href="https://gemini.google.com" target="_blank" class="py-4 border border-white/10 rounded-2xl font-bold text-xs hover:bg-white/5 transition-all">В Gemini</a>
-                    </div>
-                </div>
+            <div id="flow-steps-container" class="flex-grow">
+                <!-- Content via JS -->
+            </div>
 
+            <div class="mt-8 flex gap-3">
+                <button id="flow-prev-btn" onclick="flowPrev()" class="hidden flex-1 py-4 border border-white/10 rounded-2xl font-bold text-xs hover:bg-white/5 uppercase tracking-wider transition-all">Назад</button>
+                <button id="flow-next-btn" onclick="flowNext()" class="flex-[2] btn-primary py-4 rounded-2xl font-bold text-xs shadow-xl uppercase tracking-wider transition-all">Далее</button>
             </div>
         </div>
+
+        <!-- FINAL SCREEN -->
+        <div id="screen-final" class="hidden glass-card rounded-[3rem] p-12 text-center fade-in">
+            <div class="mb-8 flex justify-center text-emerald-500">
+                <div class="w-24 h-24 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 shadow-2xl">
+                    <svg class="w-14 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+            </div>
+            <h2 class="text-3xl font-black mb-4 italic">Всё настроено!</h2>
+            <p class="text-slate-400 mb-10 leading-relaxed italic">
+                Вы проделали отличную работу. Теперь у вас есть полный набор инструментов для практикума. Увидимся на встрече!
+            </p>
+            <button onclick="location.reload()" class="btn-primary py-4 px-10 rounded-2xl font-bold">На главную</button>
+        </div>
+
     </div>
 
     <script>
-        let currentStep = 0;
-        let selectedLocation = 'ru';
+        const states = {
+            location: 'ru',
+            completed: { chatgpt: false, claude: false, gemini: false, notebook: false },
+            currentFlow: null,
+            currentFlowStep: 0
+        };
 
-        function goToStep(step) {
-            // Анимация скрытия текущего контента
-            const activeCard = document.querySelector('.step-card:not(.hidden)');
-            if (activeCard) activeCard.classList.add('hidden');
-            
-            document.getElementById('step-0').classList.add('hidden');
-            document.getElementById('workflow').classList.remove('hidden');
-            
-            // Показ нового контента
-            const nextCard = document.getElementById(`step-content-${step}`);
-            if (nextCard) nextCard.classList.remove('hidden');
-            
-            currentStep = step;
-            updateUI();
+        const flowData = {
+            chatgpt: {
+                title: 'ChatGPT',
+                ru: [
+                    { 
+                        t: '1. Устанавливаем ВПН', 
+                        c: 'Для работы ChatGPT из России обязательно нужен ВПН. Без него сайт просто не откроется.',
+                        details: `
+                            <p class='text-sm mb-4 font-bold'>🔐 Проверенные способы (выберите один):</p>
+                            <ul class='text-xs space-y-3 text-slate-400 italic leading-relaxed'>
+                                <li>• <b>ВПН-боты в Telegram:</b> Самый простой вариант. Рекомендую <b>@VpnDucksBot</b>, <b>@VANYA_VPN_BOT</b> или <b>@folkvpn_bot</b>. Они работают стабильно и на ПК, и на телефоне.</li>
+                                <li>• <b>Расширения для браузера:</b> Можно установить Planet VPN или Browsec прямо в Chrome.</li>
+                            </ul>
+                            <div class='img-tip'>
+                                
+                            </div>
+                        `
+                    },
+                    { 
+                        t: '2. Арендуем номер (Hero-SMS)', 
+                        c: 'Для регистрации нужен зарубежный телефонный номер. Мы воспользуемся сервисом Hero-SMS.com.',
+                        details: `
+                            <p class='text-sm mb-4 font-bold'>Шаги на сайте Hero-SMS:</p>
+                            <ol class='text-xs space-y-4 text-slate-400 list-decimal pl-5 leading-relaxed'>
+                                <li>Перейдите на сайт <a href='https://hero-sms.com/' target='_blank' class='text-violet-400 underline'>hero-sms.com</a>.</li>
+                                <li>Найдите кнопку <b>Log In</b> в правом верхнем углу и нажмите её.</li>
+                                <li>В появившемся окне нажмите ссылку <b>Register</b> под формой входа, чтобы создать новый аккаунт.</li>
+                                <li>Пополните баланс на небольшую сумму (примерно 100 рублей).</li>
+                                <li>Выберите страну номера. <b>Важно:</b> выбирайте ту же страну, которая включена у вас в ВПН (например, США или Великобритания).</li>
+                                <li>Найдите в списке сервисов <b>OpenAI (ChatGPT)</b> и нажмите кнопку покупки номера.</li>
+                            </ol>
+                            <div class='img-tip'>
+                                
+                            </div>
+                        `
+                    },
+                    { 
+                        t: '3. Регистрация на сайте', 
+                        c: 'Теперь, когда у нас есть ВПН и номер, приступаем к созданию аккаунта.',
+                        details: `
+                            <p class='text-sm mb-4 font-bold'>Как зарегистрироваться:</p>
+                            <ul class='text-xs space-y-4 text-slate-400 leading-relaxed'>
+                                <li>• Включите ВПН и перейдите на <b>chatgpt.com</b>.</li>
+                                <li>• Нажмите кнопку <b>"Log in"</b>, а затем выберите <b>"Continue with Google"</b>. Используйте вашу почту Gmail.</li>
+                                <li>• Когда система попросит номер телефона — вставьте тот номер, который вы арендовали на Hero-SMS.</li>
+                                <li>• Вернитесь на страницу Hero-SMS и ждите СМС-код. Как только он появится, скопируйте его и вставьте на сайте ChatGPT.</li>
+                            </ul>
+                            <div class='img-tip'>
+                                
+                            </div>
+                        `
+                    }
+                ],
+                world: [
+                    { t: '1. Сайт ChatGPT', c: 'Просто зайдите на chatgpt.com. Нажмите "Continue with Google" и используйте вашу основную почту Gmail для входа.', details: '<p class="text-xs text-slate-400">Для пользователей вне РФ подтверждение номера телефона обычно не требуется или подходит локальный номер.</p>' }
+                ]
+            },
+            claude: {
+                title: 'Claude',
+                ru: [
+                    { t: '1. ВПН (Только США)', c: 'Claude очень строг к локациям. Обязательно включите ВПН с локацией "США" (USA).', details: '<p class="text-xs text-slate-400 italic leading-relaxed">Если вы видите надпись "App is not available", значит ваш ВПН не справляется. Попробуйте сменить сервер на другой город США.</p>' },
+                    { t: '2. Номер для Claude', c: 'Регистрация также требует СМС. Вы можете арендовать номер на <b>Hero-SMS</b> специально для сервиса Claude.', details: '<p class="text-xs text-slate-400 leading-relaxed">Зайдите на Hero-SMS под своим логином (Register если еще нет), выберите страну США и найдите в поиске сервис <b>Claude</b>.</p>' },
+                    { t: '3. Вход через Google', c: 'Зайдите на <b>claude.ai</b> под ВПН и выберите вход через вашу Google-почту.', details: '<div class="img-tip"></div>' }
+                ],
+                world: [
+                    { t: '1. Доступ к Claude', c: 'Перейдите на claude.ai и авторизуйтесь через свою почту Google.', details: '' }
+                ]
+            },
+            gemini: {
+                title: 'Google Gemini',
+                ru: [
+                    { t: '1. Настройка Gemini', c: 'Этот сервис от Google работает в России только под ВПН.', details: '<p class="text-xs text-slate-400 leading-relaxed italic">Включите ВПН (США), перейдите на <b>gemini.google.com</b> и войдите под своей почтой Gmail. Дополнительная регистрация обычно не требуется.</p>' }
+                ],
+                world: [
+                    { t: '1. Прямой вход', c: 'Просто зайдите на gemini.google.com под своим аккаунтом Google.', details: '' }
+                ]
+            },
+            notebook: {
+                title: 'NotebookLM',
+                ru: [
+                    { t: '1. NotebookLM', c: 'Инструмент для глубокого анализа ваших файлов. Также требует включенного ВПН.', details: '<p class="text-xs text-slate-400 italic leading-relaxed">Зайдите на <b>notebooklm.google.com</b>. Вход осуществляется мгновенно через ваш Google-аккаунт. Это лучший помощник для обучения на практикуме!</p>' }
+                ],
+                world: [
+                    { t: '1. Старт работы', c: 'Зайдите на notebooklm.google.com и начинайте загружать материалы.', details: '' }
+                ]
+            }
+        };
+
+        function showScreen(id) {
+            document.querySelectorAll('body > div.w-full > div').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
         }
 
         function setLocation(loc) {
-            selectedLocation = loc;
-            const vpnBlock = document.getElementById('vpn-block');
-            const step3Title = document.getElementById('step-3-title');
+            states.location = loc;
+            showScreen('screen-dashboard');
+        }
+
+        function startFlow(ai) {
+            states.currentFlow = ai;
+            states.currentFlowStep = 0;
+            renderFlowStep();
+            showScreen('screen-flow');
+        }
+
+        function toggleDetails() {
+            const details = document.getElementById('step-details');
+            const btn = document.getElementById('toggle-btn');
+            details.classList.toggle('open');
+            btn.innerText = details.classList.contains('open') ? 'Скрыть инструкции' : 'Подробные инструкции';
+        }
+
+        function renderFlowStep() {
+            const container = document.getElementById('flow-steps-container');
+            const flow = flowData[states.currentFlow][states.location];
+            const step = flow[states.currentFlowStep];
             
-            if(loc === 'world') {
-                vpnBlock.classList.add('hidden');
-                step3Title.innerText = 'Ваша почта';
+            document.getElementById('flow-title').innerText = flowData[states.currentFlow].title;
+
+            container.innerHTML = `
+                <div class="fade-in">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-2 py-0.5 rounded bg-violet-600 text-[9px] font-black text-white uppercase italic tracking-tighter">ШАГ ${states.currentFlowStep + 1}</span>
+                        <div class="h-[1px] flex-grow bg-white/10"></div>
+                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">${states.currentFlowStep + 1} / ${flow.length}</span>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4 italic italic step-num">${step.t}</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6 italic">${step.c}</p>
+                    
+                    ${step.details ? `
+                        <button id="toggle-btn" onclick="toggleDetails()" class="w-full py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-violet-400 hover:bg-violet-500/10 transition-all mb-4">
+                            Подробные инструкции
+                        </button>
+                        <div id="step-details" class="details-content">
+                            <div class="text-slate-200">
+                                ${step.details}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            document.getElementById('flow-prev-btn').classList.toggle('hidden', states.currentFlowStep === 0);
+            document.getElementById('flow-next-btn').innerText = (states.currentFlowStep === flow.length - 1) ? 'ЗАВЕРШИТЬ НАСТРОЙКУ' : 'ДАЛЕЕ';
+        }
+
+        function flowNext() {
+            const flow = flowData[states.currentFlow][states.location];
+            if (states.currentFlowStep < flow.length - 1) {
+                states.currentFlowStep++;
+                renderFlowStep();
             } else {
-                vpnBlock.classList.remove('hidden');
-                step3Title.innerText = 'Доступ и почта';
-            }
-            goToStep(3);
-        }
-
-        function goBack() {
-            if (currentStep <= 1) {
-                document.getElementById('workflow').classList.add('hidden');
-                document.getElementById('step-0').classList.remove('hidden');
-                currentStep = 0;
-            } else {
-                goToStep(currentStep - 1);
+                states.completed[states.currentFlow] = true;
+                backToDashboard();
             }
         }
 
-        function updateUI() {
-            const bar = document.getElementById('progress-bar');
-            const text = document.getElementById('progress-text');
-            const totalSteps = 5;
-            
-            let percentage = (currentStep / totalSteps) * 100;
-            if (currentStep === 5) percentage = 100;
-            
-            bar.style.width = percentage + '%';
-            text.innerText = Math.round(percentage) + '%';
+        function flowPrev() {
+            if (states.currentFlowStep > 0) {
+                states.currentFlowStep--;
+                renderFlowStep();
+            }
         }
 
-        function copyPrompt() {
-            const text = document.getElementById('prompt-text').innerText.replace('[ваша сфера: психология / дизайн / бизнес]', 'своим делом');
-            const el = document.createElement('textarea');
-            el.value = text;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            alert("Промпт скопирован! Теперь вставьте его в чат с ИИ.");
+        function backToDashboard() {
+            updateDashboardUI();
+            showScreen('screen-dashboard');
+        }
+
+        function updateDashboardUI() {
+            let doneCount = 0;
+            for (let key in states.completed) {
+                const card = document.getElementById(`card-${key}`);
+                if (states.completed[key]) {
+                    card.classList.add('completed');
+                    doneCount++;
+                }
+            }
+
+            const progress = Math.round((doneCount / 4) * 100);
+            document.getElementById('overall-progress').innerText = progress + '%';
+            
+            const finishBtn = document.getElementById('btn-finish');
+            if (doneCount > 0) {
+                finishBtn.disabled = false;
+                finishBtn.classList.remove('opacity-50');
+            }
+        }
+
+        function finishOnboarding() {
+            showScreen('screen-final');
         }
     </script>
 </body>
