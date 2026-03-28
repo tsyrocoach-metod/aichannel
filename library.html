@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Библиотека ИИ-решений</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--card-bg:rgba(255,255,255,0.04);--card-border:rgba(255,255,255,0.08);--card-hover:rgba(255,255,255,0.07);--purple:#b44dff;--purple-light:#d48aff;--purple-soft:rgba(180,77,255,0.08);--green:#34d399;--green-soft:rgba(52,211,153,0.1);--blue:#60a5fa;--blue-soft:rgba(96,165,250,0.1);--orange:#fb923c;--orange-soft:rgba(251,146,60,0.1);--text:#e8e8f0;--text-dim:#8888a0;--text-muted:#555570;--radius:16px;--radius-sm:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-40%;left:-20%;width:80vw;height:80vw;background:radial-gradient(circle,rgba(180,77,255,0.06) 0%,transparent 60%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;bottom:-30%;right:-10%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(96,165,250,0.04) 0%,transparent 60%);pointer-events:none;z-index:0}
+.container{max-width:900px;margin:0 auto;padding:40px 20px 80px;position:relative;z-index:1}
+.header{text-align:center;padding:40px 0 50px}
+.header-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--purple),#8b2fc9);border-radius:18px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:28px;box-shadow:0 8px 32px rgba(180,77,255,0.25)}
+.header-icon svg{width:32px;height:32px;stroke:white;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(32px,6vw,48px);font-weight:700;line-height:1.15;margin-bottom:16px}
+.header h1 em{color:var(--purple-light);font-style:italic}
+.header p{color:var(--text-dim);font-size:16px;line-height:1.6;max-width:500px;margin:0 auto}
+.tabs{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap;justify-content:center}
+.tab{padding:10px 22px;border-radius:100px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text-dim);font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:8px;user-select:none}
+.tab:hover{border-color:rgba(255,255,255,0.15);color:var(--text)}
+.tab.active{background:var(--purple-soft);border-color:var(--purple);color:var(--purple-light)}
+.tab .count{background:rgba(255,255,255,0.08);padding:2px 8px;border-radius:100px;font-size:12px;font-weight:700}
+.tab.active .count{background:rgba(180,77,255,0.2)}
+.cards-grid{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);overflow:hidden;transition:all .3s;cursor:pointer}
+.card:hover{background:var(--card-hover);border-color:rgba(255,255,255,0.12);transform:translateY(-1px)}
+.card.open{border-color:rgba(180,77,255,0.2);background:rgba(180,77,255,0.03)}
+.card-header{display:flex;align-items:center;gap:16px;padding:20px 24px}
+.card-emoji{font-size:28px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:14px;flex-shrink:0}
+.card[data-cat="life"] .card-emoji{background:var(--green-soft)}
+.card[data-cat="learn"] .card-emoji{background:var(--blue-soft)}
+.card[data-cat="work"] .card-emoji{background:var(--orange-soft)}
+.card-info{flex:1;min-width:0}
+.card-title{font-size:16px;font-weight:700;line-height:1.35;margin-bottom:4px}
+.card-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.card-tag{font-size:12px;font-weight:600;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:.5px}
+.card[data-cat="life"] .card-tag{background:var(--green-soft);color:var(--green)}
+.card[data-cat="learn"] .card-tag{background:var(--blue-soft);color:var(--blue)}
+.card[data-cat="work"] .card-tag{background:var(--orange-soft);color:var(--orange)}
+.card-tool{font-size:12px;color:var(--text-muted);font-weight:500}
+.card-chevron{width:20px;height:20px;color:var(--text-muted);transition:transform .3s;flex-shrink:0}
+.card.open .card-chevron{transform:rotate(180deg);color:var(--purple-light)}
+.card-body{max-height:0;overflow:hidden;transition:max-height .4s}
+.card.open .card-body{max-height:1200px}
+.card-content{padding:0 24px 24px;border-top:1px solid var(--card-border)}
+.section{margin-top:20px}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-muted);margin-bottom:8px}
+.section-text{font-size:14px;line-height:1.7;color:var(--text-dim)}
+.prompt-block{background:rgba(180,77,255,0.06);border:1px solid rgba(180,77,255,0.12);border-radius:var(--radius-sm);padding:16px 20px;margin-top:8px;position:relative}
+.prompt-text{font-size:13.5px;line-height:1.7;color:var(--text);white-space:pre-wrap}
+.copy-btn{position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600;color:var(--text-dim);cursor:pointer;transition:all .2s;font-family:'Manrope',sans-serif}
+.copy-btn:hover{background:rgba(180,77,255,0.15);border-color:var(--purple);color:var(--purple-light)}
+.copy-btn.copied{background:rgba(52,211,153,0.15);border-color:var(--green);color:var(--green)}
+.tips{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.tip{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.6;color:var(--text-dim)}
+.tip-dot{color:var(--purple);font-size:10px;margin-top:4px;flex-shrink:0}
+.tool-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;margin-top:8px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text-dim)}
+.footer{text-align:center;padding:48px 0;color:var(--text-muted);font-size:13px}
+.footer a{color:var(--purple-light);text-decoration:none}
+@media(max-width:600px){.container{padding:24px 16px 60px}.header{padding:24px 0 36px}.card-header{padding:16px;gap:12px}.card-content{padding:0 16px 20px}.card-emoji{width:44px;height:44px;font-size:22px;border-radius:12px}.card-title{font-size:15px}.prompt-block{padding:14px 16px}}
+</style>
+</head>
+<body>
+<div class="container">
+<header class="header">
+<div class="header-icon"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><path d="M10 21h4"/><path d="M12 18v3"/></svg></div>
+<h1>Библиотека <em>ИИ-решений</em></h1>
+<p>Готовые рецепты для решения задач с помощью ИИ. Нажмите на карточку — внутри промпт, который можно скопировать и использовать прямо сейчас.</p>
+</header>
+<div class="tabs" id="tabs">
+<div class="tab active" data-filter="all">Все <span class="count" id="count-all"></span></div>
+<div class="tab" data-filter="life">🏠 Личное <span class="count" id="count-life"></span></div>
+<div class="tab" data-filter="learn">📚 Обучение <span class="count" id="count-learn"></span></div>
+<div class="tab" data-filter="work">💼 Работа <span class="count" id="count-work"></span></div>
+</div>
+<div class="cards-grid" id="cards"></div>
+<footer class="footer">Практикум «Нейрограмотность» от <a href="#">Ирины Клейман</a></footer>
+</div>
+<script>
+var DATA=[
+{cat:"life",emoji:"\uD83C\uDF7D",title:"Меню на неделю с бюджетом и списком покупок",tool:"Gemini / ChatGPT",goal:"Получить готовое меню на 5\u20137 дней с учётом бюджета, предпочтений и ограничений \u2014 и сразу список продуктов для закупки.",result:"Таблица: день \u2192 завтрак / обед / ужин. Плюс итоговый список покупок с примерными ценами и общей суммой.",prompt:"Ты \u2014 опытный нутрициолог для занятых работающих мам, которые не любят готовить дольше 30 минут.\n\n\u0421\u043E\u0441\u0442\u0430\u0432\u044C меню на 5 будних дней для семьи: двое взрослых + ребёнок 5 лет. Бюджет \u2014 7 000 рублей. Ребёнок не ест грибы и не любит острое. Ужин \u2014 не дольше 30 минут.\n\nФормат:\n\u2014 Таблица: день, завтрак, обед, ужин\n\u2014 Отдельно: список покупок с ценами\n\u2014 Итог по бюджету",tips:["Добавьте ограничения: аллергии, вегетарианство, сезонные продукты","Попросите \u00ABзамени вторник \u2014 мы не едим рыбу\u00BB \u2014 ИИ пересчитает","Попросите \u00ABдобавь перекусы для ребёнка в школу\u00BB \u2014 в том же диалоге"]},
+{cat:"life",emoji:"\uD83C\uDF82",title:"Организовать детский праздник",tool:"Gemini / Claude",goal:"Получить полный план мероприятия: тайминг, активности, меню, список покупок, бюджет.",result:"Готовый документ с планом по часам, списком того, что купить и подготовить заранее, и бюджетом.",prompt:"Ты \u2014 организатор детских праздников с 10-летним опытом.\n\nМне нужно организовать день рождения дочери дома. 8 детей, возраст 6\u20137 лет. Бюджет \u2014 15 000 руб.\n\nСоставь полный план:\n1. Тайминг (по часам): встреча, игры, еда, торт, завершение\n2. 4\u20135 активностей (не требующих аниматора)\n3. Меню для детей\n4. Список покупок с ценами\n5. Что подготовить за день до праздника\n\nФормат \u2014 таблица + чек-лист.",tips:["Уточните: \u00ABдвое детей не едят глютен\u00BB \u2014 ИИ пересчитает меню","Попросите: \u00ABпридумай 3 варианта тематики \u2014 Гарри Поттер, космос, детективы\u00BB","Попросите \u00ABсписок покупок раздели на: продукты / декор / расходники\u00BB"]},
+{cat:"life",emoji:"\u2709\uFE0F",title:"Написать сложное сообщение",tool:"Claude",goal:"Сформулировать сообщение в ситуации, где важна тональность: отказ, просьба, конфликт.",result:"2\u20133 варианта сообщения разной степени мягкости. Выбираете лучший.",prompt:"Помоги написать сообщение соседу.\n\nСитуация: его ребёнок бегает по квартире каждый вечер после 22:00, у нас не может уснуть малыш. До этого общались нормально, не хочу портить отношения.\n\nНапиши 2 варианта:\n1. Мягкий \u2014 дружелюбный, с пониманием\n2. Конкретный \u2014 вежливый, но с чёткой просьбой\n\nТон \u2014 без обвинений, без пассивной агрессии.",tips:["Работает для любых коммуникаций: родительский чат, коллеги, клиенты","Попросите \u00ABдобавь вариант для голосового сообщения \u2014 покороче\u00BB","Для рабочих писем добавьте контекст: кто вы, кому пишете, какие отношения"]},
+{cat:"life",emoji:"\uD83D\uDCB0",title:"Разобраться в расходах и составить бюджет",tool:"Claude",goal:"Проанализировать расходы, найти, где утекают деньги, получить варианты бюджета.",result:"Анализ по категориям + 3 варианта бюджета с конкретными рекомендациями.",prompt:"Вот мои основные расходы за месяц:\n\u2014 Аренда: 45 000\n\u2014 Продукты: 25 000\n\u2014 Кафе и доставка: 12 000\n\u2014 Транспорт: 8 000\n\u2014 Подписки: 5 000\n\u2014 Одежда: 10 000\n\u2014 Развлечения: 7 000\n\nДоход \u2014 130 000 руб.\n\nПроанализируй:\n1. Где я трачу непропорционально много?\n2. Предложи 3 варианта бюджета: жёсткий, умеренный, комфортный\n3. Формат \u2014 таблица с комментариями",tips:["Замените цифры на свои реальные расходы","Попросите добавить категорию \u00ABподушка безопасности\u00BB и рассчитать накопления","Для семьи: \u00ABРаздели расходы на общие и личные\u00BB"]},
+{cat:"life",emoji:"\uD83C\uDFCB\uFE0F",title:"Составить план тренировок",tool:"Gemini / ChatGPT",goal:"Мягкий план для возвращения к спорту после перерыва.",result:"План на 2 недели: дни, упражнения, повторения, длительность.",prompt:"Ты \u2014 фитнес-тренер для мягкого возвращения к тренировкам.\n\nСоставь план на 2 недели. Мне 35, сидячая работа, побаливает поясница, не тренировалась 3 года. Коврик и гантели 3 кг. 3 раза в неделю по 30\u201340 минут, дома.\n\nФормат \u2014 таблица: день, разминка, упражнения (название + повторения), заминка.\n\nВажно: без прыжков, без резких нагрузок.",tips:["Добавьте свои ограничения: травмы, инвентарь, время","Через 2 недели попросите усложнить план","Для медицинских тем \u2014 проверяйте с врачом"]},
+{cat:"learn",emoji:"\uD83C\uDF93",title:"Изучить тему по видео с YouTube",tool:"NotebookLM",goal:"Разобраться в теме за 15 минут вместо 2-часового видео.",result:"Конспект в 10 тезисах + ответы на вопросы + план действий.",prompt:"[Загрузите ссылку на YouTube-видео в NotebookLM]\n\nЗатем спросите:\n\n1. \u00ABОбъясни главную идею этого видео в 3 предложениях\u00BB\n2. \u00ABКакие практические выводы я могу сделать?\u00BB\n3. \u00ABСоставь конспект: 10 ключевых тезисов\u00BB\n4. \u00ABЧто здесь самое спорное или неочевидное?\u00BB\n5. \u00ABСоставь план действий на 2 недели на основе этого материала\u00BB",tips:["Загрузите несколько видео по одной теме \u2014 NotebookLM ответит на основе всех","Спросите: \u00ABЧем отличается подход автора А от автора Б?\u00BB","Попросите объяснить сложный термин простым языком"]},
+{cat:"learn",emoji:"\uD83D\uDCD6",title:"Разобрать книгу или курс за вечер",tool:"NotebookLM",goal:"Извлечь максимум из книги или курса без необходимости читать целиком.",result:"Структурированный конспект, план внедрения идей.",prompt:"[Загрузите PDF книги или текст в NotebookLM]\n\nСпросите:\n\n1. \u00ABО чём эта книга? Главный тезис в 3 предложениях\u00BB\n2. \u00ABКакие 5 идей я могу применить в своей работе?\u00BB\n3. \u00ABГде автор противоречит сам себе?\u00BB\n4. \u00ABКакие главы самые важные, если у меня есть только 2 часа?\u00BB",tips:["Добавьте контекст своей профессии для релевантных ответов","Загрузите несколько книг \u2014 спросите, в чём авторы расходятся","Попросите составить список цитат для ваших постов"]},
+{cat:"learn",emoji:"\uD83D\uDDFA",title:"Составить план обучения по любой теме",tool:"Claude / Gemini",goal:"Персональная программа изучения темы с нуля.",result:"План на 2\u20134 недели: что изучить, в каком порядке, какие ресурсы.",prompt:"Ты \u2014 методист, который составляет образовательные программы.\n\nЯ хочу разобраться в теме: [ВАША ТЕМА].\nУровень: новичок.\nЦель: [зачем вам это].\nВремя: 30 минут в день.\n\nСоставь план на 3 недели:\n\u2014 Неделя 1: что изучить, ресурсы (бесплатные)\n\u2014 Неделя 2: углубление + практика\n\u2014 Неделя 3: применение + проект\n\nДля каждого дня \u2014 конкретное действие на 30 минут.",tips:["Чем конкретнее цель \u2014 тем точнее план","Попросите порекомендовать YouTube-каналы по теме","Загрузите план в NotebookLM и изучайте материалы там"]},
+{cat:"work",emoji:"\uD83E\uDD16",title:"Создать ИИ-ассистента для работы",tool:"Claude (проекты)",goal:"Настроить персонального ассистента, который знает ваш контекст и стиль.",result:"Проект в Claude с инструкцией. Ассистент отвечает в вашем стиле.",prompt:"Инструкция для проекта (вставьте в настройки):\n\n## Роль\nТы \u2014 [роль, например: SMM-специалист для помогающих практиков]\n\n## Контекст\nЯ \u2014 [кто вы, чем занимаетесь, ваша аудитория]\n\n## Стиль\n\u2014 Тон: тёплый, дружелюбный, экспертный\n\u2014 Никогда не используй: канцелярит, сложные термины\n\u2014 Всегда: предлагай 3 варианта\n\n## Задачи\n\u2014 [задача 1]\n\u2014 [задача 2]\n\u2014 [задача 3]",tips:["5 шагов Ирины: образ результата, роль, мышление, опоры, контекст","Просите Claude улучшить вашу инструкцию","Создайте нескольких ассистентов \u2014 маленькая команда"]},
+{cat:"work",emoji:"\uD83D\uDCDD",title:"Пост для соцсетей в вашем стиле",tool:"Claude",goal:"Готовый пост, который звучит как вы \u2014 не как робот.",result:"Текст нужной длины, 2\u20133 варианта на выбор.",prompt:"Ты \u2014 SMM-специалист для помогающих практиков.\n\nНапиши пост для Telegram-канала.\nАвтор \u2014 психолог, работает с тревожностью у предпринимателей.\nТема: почему тревога перед важным решением \u2014 это нормально.\n\nТребования:\n\u2014 До 1000 знаков\n\u2014 Тон: тёплый, без менторства\n\u2014 Без психологических терминов\n\u2014 Начни с узнаваемой ситуации\n\u2014 Закончи вовлекающим вопросом\n\u2014 Дай 3 варианта",tips:["Загрузите лучшие посты в проект Claude \u2014 он выучит стиль","Попросите адаптировать для Instagram \u2014 короче, с эмодзи","Цепочка: 10 тем \u2192 лучшие 3 \u2192 пост \u2192 доработка"]},
+{cat:"work",emoji:"\uD83D\uDCCA",title:"Таблица с формулами для проекта",tool:"Claude",goal:"Готовый xlsx-файл с формулами \u2014 скачать и использовать.",result:"Скачиваемая таблица с формулами для автоматического расчёта.",prompt:"Создай таблицу бюджета проекта.\n\nКолонки: статья расхода, план, факт, разница, процент выполнения.\n\nКатегории:\n\u2014 Производство (съёмка, монтаж, дизайн)\n\u2014 Маркетинг (реклама, лендинг, email)\n\u2014 Команда (ассистент, техподдержка)\n\u2014 Платформа и инструменты\n\nФормулы:\n\u2014 Разница = план минус факт\n\u2014 Процент = факт / план\n\u2014 Итоговая строка\n\nФормат \u2014 xlsx.",tips:["Claude создаёт реальные xlsx с работающими формулами","Попросите добавить лист \u00ABДоходы\u00BB и формулу рентабельности","Работает для любых таблиц: CRM, контент-план, расписание"]},
+{cat:"work",emoji:"\uD83D\uDCCB",title:"Программа курса или интенсива",tool:"Claude",goal:"Структурированная программа с модулями, целями и заданиями.",result:"Документ: 6\u20138 модулей с названием, целью, темами, практикой.",prompt:"Ты \u2014 методист онлайн-образования.\n\nСоставь программу курса по теме [ТЕМА].\nАудитория: [кто будет учиться].\n6 недель, 2 занятия в неделю по 60 минут.\n\nДля каждого модуля:\n\u2014 Название\n\u2014 Цель (что ученик сможет после)\n\u2014 3\u20134 темы\n\u2014 Практическое задание\n\u2014 Результат модуля\n\nФормат \u2014 документ с оглавлением.",tips:["Попросите конспект конкретного занятия на 60 минут","Попросите рабочую тетрадь для ученика","Попросите описание курса для лендинга \u2014 3 варианта длины"]},
+{cat:"work",emoji:"\uD83D\uDCE8",title:"Коммерческое предложение",tool:"Claude",goal:"Готовый документ для клиента: структурированный и профессиональный.",result:"Скачиваемое КП с разделами и конкретикой.",prompt:"Составь коммерческое предложение.\n\nЯ \u2014 [ваша роль].\nУслуга: [описание].\nКлиент: [кто].\nЦена: [сумма].\n\nСтруктура:\n1. Проблема, которую решаем\n2. Что я предлагаю\n3. Как это работает (этапы)\n4. Что получает клиент\n5. Стоимость и условия\n6. Следующий шаг\n\nТон \u2014 профессиональный, но тёплый.",tips:["Загрузите бриф от клиента \u2014 КП на его основе","Попросите 3 варианта: базовый, стандарт, премиум","Попросите письмо-сопровождение на 5 предложений"]},
+{cat:"work",emoji:"\uD83D\uDCD1",title:"Протокол созвона из хаотичных заметок",tool:"Claude",goal:"Превратить сумбурные заметки в чёткий протокол.",result:"Протокол: решения, задачи (кто / что / когда), открытые вопросы.",prompt:"Вот мои заметки с созвона (сумбурные, как есть):\n\n[ВСТАВЬТЕ ЗАМЕТКИ]\n\nПреврати в протокол:\n1. Участники\n2. Ключевые обсуждения (3\u20135 пунктов)\n3. Принятые решения\n4. Задачи \u2014 таблица: задача, ответственный, срок\n5. Открытые вопросы\n\nТон \u2014 деловой, без воды.",tips:["Работает даже с очень хаотичными заметками","Попросите формат для Trello или Notion","Попросите резюме на 3 предложения для тех, кого не было"]}
+];
+
+var catLabel={life:"Личное",learn:"Обучение",work:"Работа"};
+var grid=document.getElementById("cards");
+
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+function updateCounts(){
+document.getElementById("count-all").textContent=DATA.length;
+document.getElementById("count-life").textContent=DATA.filter(function(d){return d.cat==="life"}).length;
+document.getElementById("count-learn").textContent=DATA.filter(function(d){return d.cat==="learn"}).length;
+document.getElementById("count-work").textContent=DATA.filter(function(d){return d.cat==="work"}).length;
+}
+
+function renderCards(filter){
+var html="";
+for(var i=0;i<DATA.length;i++){
+var d=DATA[i];
+if(filter!=="all"&&d.cat!==filter)continue;
+var tipsHtml="";
+for(var t=0;t<d.tips.length;t++){
+tipsHtml+='<div class="tip"><span class="tip-dot">\u2726</span><span>'+esc(d.tips[t])+'</span></div>';
+}
+html+='<div class="card" data-cat="'+d.cat+'" data-idx="'+i+'">'
++'<div class="card-header">'
++'<div class="card-emoji">'+d.emoji+'</div>'
++'<div class="card-info"><div class="card-title">'+esc(d.title)+'</div>'
++'<div class="card-meta"><span class="card-tag">'+catLabel[d.cat]+'</span><span class="card-tool">'+esc(d.tool)+'</span></div></div>'
++'<svg class="card-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8l4 4 4-4"/></svg>'
++'</div>'
++'<div class="card-body"><div class="card-content">'
++'<div class="section"><div class="section-label">Цель</div><div class="section-text">'+esc(d.goal)+'</div></div>'
++'<div class="section"><div class="section-label">Идеальный результат</div><div class="section-text">'+esc(d.result)+'</div></div>'
++'<div class="section"><div class="section-label">Промпт</div><div class="prompt-block"><div class="prompt-text">'+esc(d.prompt)+'</div><button class="copy-btn" data-idx="'+i+'">Копировать</button></div></div>'
++'<div class="section"><div class="section-label">Фишки, чтобы сделать круче</div><div class="tips">'+tipsHtml+'</div></div>'
++'<div class="section"><div class="tool-badge">\u26A1 '+esc(d.tool)+'</div></div>'
++'</div></div></div>';
+}
+grid.innerHTML=html;
+
+var cards=grid.querySelectorAll(".card");
+for(var c=0;c<cards.length;c++){
+cards[c].addEventListener("click",function(e){
+if(e.target.closest(".copy-btn"))return;
+this.classList.toggle("open");
+});
+}
+var btns=grid.querySelectorAll(".copy-btn");
+for(var b=0;b<btns.length;b++){
+btns[b].addEventListener("click",function(e){
+e.stopPropagation();
+var idx=parseInt(this.getAttribute("data-idx"));
+var btn=this;
+navigator.clipboard.writeText(DATA[idx].prompt).then(function(){
+btn.textContent="Скопировано \u2713";
+btn.classList.add("copied");
+setTimeout(function(){btn.textContent="Копировать";btn.classList.remove("copied");},2000);
+});
+});
+}
+}
+
+var tabs=document.querySelectorAll(".tab");
+for(var i=0;i<tabs.length;i++){
+tabs[i].addEventListener("click",function(){
+for(var j=0;j<tabs.length;j++)tabs[j].classList.remove("active");
+this.classList.add("active");
+renderCards(this.getAttribute("data-filter"));
+});
+}
+updateCounts();
+renderCards("all");
+</script>
+</body>
+</html>
