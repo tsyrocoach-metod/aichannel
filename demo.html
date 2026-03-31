@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Светлана Цыро — Методология и ИИ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px border rgba(255, 255, 255, 0.05); }
+        .modal-overlay { background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); }
+        .pricing-card-highlight { background: white; color: black; }
+    </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+
+    <!-- Навигация -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-8">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="text-lg font-bold tracking-tighter flex items-center gap-3">
+                <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center">
+                    <span class="text-black font-serif text-base italic">СЦ</span>
+                </div>
+                СВЕТЛАНА ЦЫРО
+            </div>
+            
+            <div class="hidden lg:flex items-center gap-10">
+                <a href="#about" class="text-[10px] font-bold text-white/40 hover:text-white transition-colors uppercase tracking-[0.25em]">О подходе</a>
+                <a href="#services" class="text-[10px] font-bold text-white/40 hover:text-white transition-colors uppercase tracking-[0.25em]">Услуги и ИИ</a>
+                <a href="#pricing" class="text-[10px] font-bold text-white/40 hover:text-white transition-colors uppercase tracking-[0.25em]">Форматы работы</a>
+            </div>
+
+            <button onclick="toggleModal(true)" class="bg-white text-black px-5 py-2.5 rounded-full text-[11px] font-bold hover:opacity-80 transition-all active:scale-95 uppercase tracking-wider">
+                Обсудить проект
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        <div class="absolute top-1/4 right-0 w-[500px] h-[500px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 mb-8">
+                    <i data-lucide="cpu" class="w-4 h-4 text-blue-400"></i>
+                    <span class="text-[10px] uppercase tracking-widest font-bold text-white/70">Methodology meets AI</span>
+                </div>
+                <h1 class="text-5xl md:text-8xl font-medium tracking-tight leading-[1] mb-8">
+                    Методология <br />
+                    <span class="text-white/30 italic">на стероидах ИИ</span>
+                </h1>
+                <p class="text-lg md:text-xl text-white/50 max-w-2xl mb-12 leading-relaxed font-light">
+                    Я помогаю экспертам и онлайн-школам проектировать программы, которые обучают эффективно, и внедряю ИИ-инструменты, чтобы вы создавали контент в 10 раз быстрее.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-5">
+                    <button onclick="toggleModal(true)" class="bg-white text-black px-10 py-5 rounded-full font-bold flex items-center justify-center gap-3 hover:pr-12 transition-all active:scale-95">
+                        Заполнить анкету
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+                    <a href="#pricing" class="border border-white/10 hover:border-white/30 text-white px-10 py-5 rounded-full font-medium transition-all flex items-center justify-center backdrop-blur-sm">
+                        Варианты работы
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Краткие факты -->
+    <div class="container mx-auto px-6 pb-32">
+        <div class="grid md:grid-cols-3 gap-12">
+            <div class="border-l border-white/10 pl-8">
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-3 text-white/40">Структура</h4>
+                <p class="text-lg text-white/70 font-light">Логика обучения, при которой ученик не сливается</p>
+            </div>
+            <div class="border-l border-white/10 pl-8">
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-3 text-white/40">Смыслы</h4>
+                <p class="text-lg text-white/70 font-light">Вытаскиваем экспертность из головы в продукт</p>
+            </div>
+            <div class="border-l border-white/10 pl-8">
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-3 text-white/40">ИИ-ускорение</h4>
+                <p class="text-lg text-white/70 font-light">Автоматизация рутины: от планов уроков до тестов</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Тарифы -->
+    <section id="pricing" class="py-32">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex items-center justify-center gap-2 mb-6">
+                <div class="h-[1px] w-8 bg-white/20"></div>
+                <span class="text-[10px] uppercase tracking-[0.2em] text-white/50 font-medium">Форматы и стоимость</span>
+            </div>
+            <h2 class="text-4xl md:text-6xl font-medium mb-20 tracking-tight">Выберите свой <span class="text-white/30 italic">путь роста</span></h2>
+            
+            <div class="grid lg:grid-cols-3 gap-6 text-left max-w-7xl mx-auto">
+                <!-- Тариф 1 -->
+                <div class="p-12 rounded-[48px] flex flex-col transition-all duration-500 border border-white/10 text-white">
+                    <div class="mb-8">
+                        <h4 class="text-[10px] uppercase tracking-[0.3em] font-bold mb-4 text-white/30">Индивидуально</h4>
+                        <div class="text-4xl font-medium mb-2">20 000 <span class="text-base opacity-40">₽</span></div>
+                        <p class="text-sm font-light text-white/40">Персональная сессия 1.5-2 часа</p>
+                    </div>
+                    <div class="h-[1px] w-full bg-white/10 mb-8"></div>
+                    <ul class="space-y-5 mb-16 flex-grow">
+                        <li class="flex items-start gap-4 text-[13px] font-medium leading-tight">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-white/20 mt-0.5"></i> Разработка продукта
+                        </li>
+                        <li class="flex items-start gap-4 text-[13px] font-medium leading-tight">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-white/20 mt-0.5"></i> Обучение ИИ под ваши задачи
+                        </li>
+                        <li class="flex items-start gap-4 text-[13px] font-medium leading-tight">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-white/20 mt-0.5"></i> Запись и конспект
+                        </li>
+                    </ul>
+                    <button onclick="handleTg('Сессия')" class="w-full py-5 rounded-full font-bold transition-all uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> Записаться на сессию
+                    </button>
+                </div>
+
+                <!-- Тариф 2 (Highlight) -->
+                <div class="p-12 rounded-[48px] flex flex-col transition-all duration-500 bg-white text-black border-white scale-105 shadow-2xl">
+                    <div class="mb-8">
+                        <h4 class="text-[10px] uppercase tracking-[0.3em] font-bold mb-4 text-black/40">Для экспертов</h4>
+                        <div class="text-4xl font-medium mb-2">80 000 <span class="text-base opacity-40">₽</span></div>
+                        <p class="text-sm font-light text-black/60">Менторинг «Методологический запуск»</p>
+                    </div>
+                    <div class="h-[1px] w-full bg-black/10 mb-8"></div>
+                    <ul class="space-y-5 mb-16 flex-grow">
+                        <li class="flex items-start gap-4 text-[13px] font-medium leading-tight text-black/80 font-bold">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-black/20 mt-0.5"></i> Старт 10 апреля
+                        </li>
+                        <li class="flex items-start gap-4 text-[13px] font-medium leading-tight">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-black/20 mt-0.5"></i> Личное ведение в группе
+                        </li>
+                        <li class="flex items-start gap-4 text-[13px] font-medium leading-tight">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-black/20 mt-0.5"></i> Внедрение ИИ в запуск
+                        </li>
+                    </ul>
+                    <button onclick="handleTg('Запуск')" class="w-full py-5 rounded-full font-bold transition-all uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-3 bg-black text-white hover:bg-zinc-800">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> Хочу в группу
+                    </button>
+                </div>
+
+                <!-- Тариф 3 -->
+                <div class="p-12 rounded-[48px] flex flex-col transition-all duration-500 border border-white/10 text-white">
+                    <div class="mb-8">
+                        <h4 class="text-[10px] uppercase tracking-[0.3em] font-bold mb-4 text-white/30">Для школ</h4>
+                        <div class="text-4xl font-medium mb-2">от 200к <span class="text-base opacity-40">₽</span></div>
+                        <p class="text-sm font-light text-white/40">Аудит и сборка программы</p>
+                    </div>
+                    <div class="h-[1px] w-full bg-white/10 mb-8"></div>
+                    <ul class="space-y-5 mb-16 flex-grow">
+                        <li class="flex items-start gap-4 text-[13px] font-medium leading-tight text-white/70">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-white/20 mt-0.5"></i> Аудит текущего курса
+                        </li>
+                        <li class="flex items-start gap-4 text-[13px] font-medium leading-tight text-white/70">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-white/20 mt-0.5"></i> Настройка AI-процессов
+                        </li>
+                        <li class="flex items-start gap-4 text-[13px] font-medium leading-tight text-white/70">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-white/20 mt-0.5"></i> Поддержка внедрения
+                        </li>
+                    </ul>
+                    <button onclick="handleTg('Аудит')" class="w-full py-5 rounded-full font-bold transition-all uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> Заказать аудит
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-24 border-t border-white/5 bg-black">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-16 mb-20">
+                <div class="max-w-md">
+                    <div class="text-xl font-bold tracking-tighter mb-8 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black text-base italic">СЦ</div>
+                        СВЕТЛАНА ЦЫРО
+                    </div>
+                    <p class="text-white/30 text-base leading-relaxed mb-10 font-light italic">
+                        Методология. Смыслы. Искусственный интеллект.
+                    </p>
+                    <div class="flex gap-8">
+                        <i data-lucide="instagram" class="w-5 h-5 text-white/30 cursor-pointer hover:text-white transition-all"></i>
+                        <i data-lucide="send" onclick="handleTg('')" class="w-5 h-5 text-white/30 cursor-pointer hover:text-white transition-all"></i>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-24">
+                    <div>
+                        <h5 class="text-[10px] uppercase tracking-[0.3em] font-bold text-white/20 mb-8 text-right md:text-left">Telegram</h5>
+                        <p class="text-xs font-bold text-white/40 tracking-widest uppercase">@tsyro_m</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно (Яндекс Форма) -->
+    <div id="modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 modal-overlay" onclick="toggleModal(false)"></div>
+        <div class="relative bg-[#111] border border-white/10 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl">
+            <div class="flex justify-between items-center p-6 border-b border-white/5">
+                <h3 class="text-xl font-light tracking-tight text-white/90">Анкета на сотрудничество</h3>
+                <button onclick="toggleModal(false)" class="p-2 hover:bg-white/5 rounded-full transition-colors text-white/50">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="bg-white min-h-[550px] flex items-center justify-center">
+                <!-- Контент Яндекс Формы -->
+                <script src="https://forms.yandex.ru/_static/embed.js"></script>
+                <iframe src="https://forms.yandex.ru/u/69cad31984227c5898f2f105?iframe=1" frameborder="0" name="ya-form-69cad31984227c5898f2f105" width="100%" style="min-height: 600px; border: none;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация иконок
+        lucide.createIcons();
+
+        // Скролл-эффект для Navbar
+        window.onscroll = function() {
+            const nav = document.getElementById('navbar');
+            if (window.pageYOffset > 20) {
+                nav.classList.add('bg-black/90', 'backdrop-blur-lg', 'py-4', 'border-b', 'border-white/5');
+                nav.classList.remove('py-8');
+            } else {
+                nav.classList.remove('bg-black/90', 'backdrop-blur-lg', 'py-4', 'border-b', 'border-white/5');
+                nav.classList.add('py-8');
+            }
+        };
+
+        // Логика модального окна
+        function toggleModal(show) {
+            const modal = document.getElementById('modal');
+            if (show) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'unset';
+            }
+        }
+
+        // Логика Telegram
+        function handleTg(code) {
+            const username = "tsyro_m";
+            const text = encodeURIComponent(`Привет! Кодовое слово ${code}`);
+            window.open(`https://t.me/${username}?text=${text}`, '_blank');
+        }
+    </script>
+</body>
+</html>
