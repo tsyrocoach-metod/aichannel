@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Формула оффера — Занятие 7</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800&family=Nunito:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue:        #2563EB;
+  --blue-mid:    #3B82F6;
+  --blue-light:  #EFF6FF;
+  --blue-dark:   #1E3A5F;
+  --teal:        #0D9488;
+  --teal-light:  #F0FDFB;
+  --pink:        #DB2777;
+  --pink-light:  #FDF2F8;
+  --amber:       #D97706;
+  --amber-light: #FFFBEB;
+  --text:        #0F1D2E;
+  --text-2:      #4B6080;
+  --text-3:      #8FA3BB;
+  --bg:          #F4F7FB;
+  --white:       #FFFFFF;
+  --border:      #E2E8F0;
+  --shadow-sm:   0 1px 4px rgba(15,29,46,.05), 0 4px 16px rgba(15,29,46,.06);
+  --shadow-md:   0 2px 8px rgba(15,29,46,.07), 0 8px 32px rgba(15,29,46,.10);
+  --r1: 8px; --r2: 14px; --r3: 22px; --r4: 32px;
+}
+body { font-family:'Nunito',sans-serif; font-size:14px; line-height:1.7; color:var(--text); background:var(--bg); -webkit-font-smoothing:antialiased; }
+.wrap { max-width:720px; margin:0 auto; padding:32px 16px 80px; }
+
+/* ШАПКА */
+.header { background:linear-gradient(148deg,#091828 0%,#163356 50%,#0e2a4a 100%); border-radius:var(--r4); padding:44px 40px 36px; color:#fff; margin-bottom:24px; position:relative; overflow:hidden; }
+.header::before { content:''; position:absolute; top:-70px; right:-70px; width:280px; height:280px; border-radius:50%; background:radial-gradient(circle,rgba(37,99,235,.32) 0%,transparent 70%); pointer-events:none; }
+.header::after  { content:''; position:absolute; bottom:-50px; left:30px; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(13,148,136,.22) 0%,transparent 70%); pointer-events:none; }
+.h-eye { font-family:'Exo 2',sans-serif; font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,255,255,.45); margin-bottom:12px; }
+.header h1 { font-family:'Exo 2',sans-serif; font-size:27px; font-weight:800; line-height:1.15; margin-bottom:12px; position:relative; }
+.header-sub { font-size:13.5px; color:rgba(255,255,255,.62); max-width:460px; line-height:1.6; margin-bottom:28px; position:relative; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; position:relative; }
+.chip { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); border-radius:20px; padding:5px 14px; font-family:'Exo 2',sans-serif; font-size:11px; font-weight:700; color:rgba(255,255,255,.82); letter-spacing:.04em; }
+
+/* ПРОГРЕСС */
+.prog-card { background:var(--white); border-radius:var(--r3); padding:22px 26px; box-shadow:var(--shadow-sm); margin-bottom:20px; border:1px solid var(--border); }
+.prog-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.prog-lbl { font-family:'Exo 2',sans-serif; font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--text-3); }
+.prog-pct { font-family:'Exo 2',sans-serif; font-size:14px; font-weight:800; color:var(--blue); }
+.prog-track { height:6px; background:#EEF2F7; border-radius:6px; overflow:hidden; margin-bottom:16px; }
+.prog-fill { height:100%; background:linear-gradient(90deg,var(--blue) 0%,var(--teal) 100%); border-radius:6px; width:0%; transition:width .6s cubic-bezier(.4,0,.2,1); }
+.prog-dots { display:flex; justify-content:space-between; }
+.pdot { text-align:center; flex:1; }
+.pdot-circle { width:9px; height:9px; border-radius:50%; background:#DDE5F0; margin:0 auto 5px; transition:background .4s; }
+.pdot.done .pdot-circle { background:var(--blue); }
+.pdot-lbl { font-family:'Exo 2',sans-serif; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--text-3); line-height:1.2; }
+
+/* СЕКЦИЯ */
+.section { background:var(--white); border-radius:var(--r3); padding:32px 32px 28px; box-shadow:var(--shadow-sm); margin-bottom:20px; border:1px solid var(--border); }
+.sec-head { display:flex; align-items:flex-start; gap:14px; margin-bottom:24px; }
+.sec-icon { width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.si-blue{background:var(--blue-light);} .si-teal{background:var(--teal-light);} .si-pink{background:var(--pink-light);} .si-amber{background:var(--amber-light);}
+.sec-num { font-family:'Exo 2',sans-serif; font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--text-3); margin-bottom:2px; }
+.sec-title { font-family:'Exo 2',sans-serif; font-size:20px; font-weight:800; line-height:1.2; color:var(--text); }
+
+/* INSIGHT */
+.insight { display:flex; gap:12px; border-radius:var(--r2); padding:14px 16px; margin-bottom:16px; }
+.ins-bar { width:3px; border-radius:3px; flex-shrink:0; }
+.ins-lbl { font-family:'Exo 2',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:3px; }
+.ins-txt { font-size:13px; line-height:1.65; }
+.insight.blue{background:var(--blue-light);} .insight.blue .ins-bar{background:var(--blue);} .insight.blue .ins-lbl{color:var(--blue);}
+.insight.teal{background:var(--teal-light);} .insight.teal .ins-bar{background:var(--teal);} .insight.teal .ins-lbl{color:var(--teal);}
+.insight.pink{background:var(--pink-light);} .insight.pink .ins-bar{background:var(--pink);} .insight.pink .ins-lbl{color:var(--pink);}
+.insight.amber{background:var(--amber-light);} .insight.amber .ins-bar{background:var(--amber);} .insight.amber .ins-lbl{color:var(--amber);}
+
+/* BEFORE/AFTER */
+.baf { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; }
+@media(max-width:520px){.baf{grid-template-columns:1fr;}}
+.baf-b { border-radius:var(--r2); padding:16px 18px; }
+.baf-before { background:#F8F9FC; border:1px solid var(--border); }
+.baf-after  { background:var(--teal-light); border:1px solid rgba(13,148,136,.2); }
+.baf-lbl { font-family:'Exo 2',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
+.baf-before .baf-lbl{color:var(--text-3);} .baf-after .baf-lbl{color:var(--teal);}
+.baf-txt { font-size:13px; line-height:1.6; color:var(--text); }
+
+/* CARDS GRID */
+.cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; }
+@media(max-width:460px){.cards-grid{grid-template-columns:1fr;}}
+.cg-card { border-radius:var(--r2); padding:18px 16px; border:1.5px solid transparent; }
+.cg-card.pink{background:var(--pink-light); border-color:rgba(219,39,119,.15);}
+.cg-card.teal{background:var(--teal-light); border-color:rgba(13,148,136,.2);}
+.cg-icon { font-size:22px; margin-bottom:8px; }
+.cg-title { font-family:'Exo 2',sans-serif; font-size:13px; font-weight:800; margin-bottom:5px; }
+.cg-card.pink .cg-title{color:#9D174D;} .cg-card.teal .cg-title{color:#0F766E;}
+.cg-desc { font-size:12.5px; line-height:1.55; color:var(--text-2); }
+
+/* АККОРДЕОН */
+.accordion { margin-bottom:18px; }
+.acc-item { border:1px solid var(--border); border-radius:var(--r2); margin-bottom:8px; overflow:hidden; transition:box-shadow .2s,border-color .2s; }
+.acc-item.open { border-color:#C7D7F0; box-shadow:var(--shadow-sm); }
+.acc-btn { width:100%; background:none; border:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; padding:14px 18px; font-family:'Exo 2',sans-serif; font-size:13.5px; font-weight:700; color:var(--text); text-align:left; gap:10px; transition:background .15s; }
+.acc-btn:hover{background:#F8FAFF;}
+.acc-chevron { width:22px; height:22px; border-radius:50%; background:var(--blue-light); color:var(--blue); display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; transition:transform .3s; }
+.acc-item.open .acc-chevron{transform:rotate(180deg);}
+.acc-body { max-height:0; overflow:hidden; transition:max-height .38s ease; }
+.acc-inner { padding:4px 18px 18px; font-size:13px; line-height:1.65; border-top:1px solid #F0F4FA; }
+.acc-inner .insight{margin-top:12px;margin-bottom:0;}
+
+/* КВИЗ */
+.quiz-q { font-family:'Exo 2',sans-serif; font-size:15px; font-weight:800; color:var(--text); margin-bottom:14px; line-height:1.35; }
+.quiz-opts { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+.quiz-opt { background:var(--white); border:1.5px solid var(--border); border-radius:var(--r2); padding:13px 16px; font-family:'Nunito',sans-serif; font-size:13px; color:var(--text); text-align:left; cursor:pointer; transition:border-color .2s,background .2s; line-height:1.5; }
+.quiz-opt:hover{border-color:var(--blue-mid);background:var(--blue-light);}
+.quiz-opt.correct{border-color:var(--teal);background:var(--teal-light);color:#0F766E;}
+.quiz-opt.wrong{border-color:var(--pink);background:var(--pink-light);color:#9D174D;}
+.quiz-fb { display:none; border-radius:var(--r2); padding:13px 16px; font-size:13px; line-height:1.6; }
+.quiz-fb.show{display:block;}
+.quiz-fb.ok{background:var(--teal-light);color:#0F766E;border:1px solid rgba(13,148,136,.2);}
+.quiz-fb.err{background:var(--pink-light);color:#9D174D;border:1px solid rgba(219,39,119,.15);}
+
+/* SEQUENTIAL STEPS */
+.seq-step { border:1.5px solid var(--border); border-radius:var(--r2); margin-bottom:10px; overflow:hidden; opacity:.42; transition:opacity .4s,border-color .3s,box-shadow .3s; }
+.seq-step.active{opacity:1;border-color:#BFCFE8;box-shadow:var(--shadow-sm);}
+.seq-step.done{opacity:.78;border-color:rgba(13,148,136,.35);}
+.seq-hd { padding:14px 18px; display:flex; align-items:center; gap:12px; }
+.seq-badge { width:28px; height:28px; border-radius:50%; background:#EEF2F7; color:var(--text-3); font-family:'Exo 2',sans-serif; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .3s,color .3s; }
+.seq-step.active .seq-badge{background:var(--blue);color:#fff;}
+.seq-step.done   .seq-badge{background:var(--teal);color:#fff;}
+.seq-ttl { font-family:'Exo 2',sans-serif; font-size:14px; font-weight:800; flex:1; color:var(--text); }
+.seq-mark { display:none; color:var(--teal); font-size:16px; }
+.seq-step.done .seq-mark{display:block;}
+.seq-bd { max-height:0; overflow:hidden; transition:max-height .45s ease; }
+.seq-step.active .seq-bd{max-height:800px;}
+.seq-step.done   .seq-bd{max-height:0;}
+.seq-inner { border-top:1px solid #F0F4FA; padding:16px 18px 20px; font-size:13px; line-height:1.65; }
+.seq-inner .insight{margin-top:0;margin-bottom:12px;}
+
+/* ПОЛЕ ВВОДА */
+.field-wrap{margin-bottom:14px;}
+.field-label { display:block; font-family:'Exo 2',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-2); margin-bottom:6px; }
+.field-hint { font-size:12px; color:var(--text-3); margin-bottom:7px; line-height:1.5; font-style:italic; }
+.field-input { width:100%; border:1.5px solid var(--border); border-radius:var(--r1); padding:11px 14px; font-family:'Nunito',sans-serif; font-size:13px; color:var(--text); background:var(--white); resize:vertical; min-height:74px; transition:border-color .2s,box-shadow .2s; line-height:1.6; outline:none; }
+.field-input::placeholder{color:var(--text-3);}
+.field-input:focus{border-color:var(--blue-mid);box-shadow:0 0 0 3px rgba(59,130,246,.12);}
+.field-input.filled{border-color:rgba(13,148,136,.4);background:#FAFFFD;}
+.field-ctr { font-size:11px; color:var(--text-3); text-align:right; margin-top:4px; }
+.field-ctr.warn{color:var(--pink);}
+
+/* КНОПКА ГОТОВО */
+.btn-done { display:inline-flex; align-items:center; gap:7px; margin-top:14px; padding:10px 24px; background:var(--blue); color:#fff; border:none; border-radius:24px; font-family:'Exo 2',sans-serif; font-size:12px; font-weight:700; letter-spacing:.06em; cursor:pointer; transition:background .2s,transform .15s,opacity .2s; }
+.btn-done:hover{background:#1D4ED8;}
+.btn-done:active{transform:scale(.97);}
+.btn-done:disabled{opacity:.38;cursor:not-allowed;transform:none;}
+
+/* FORMULA BLOCK */
+.formula-block { background:linear-gradient(135deg,var(--blue-light) 0%,#EDFCF8 100%); border:1.5px dashed rgba(37,99,235,.25); border-radius:var(--r2); padding:22px 24px; margin-bottom:18px; text-align:center; }
+.formula-eye { font-family:'Exo 2',sans-serif; font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--blue); margin-bottom:10px; }
+.formula-eq { font-family:'Exo 2',sans-serif; font-size:13.5px; font-weight:700; color:var(--text); line-height:1.9; }
+.f-var{color:var(--blue);font-weight:800;} .f-op{color:var(--text-3);margin:0 5px;font-weight:400;}
+
+/* РЕЗУЛЬТАТ ОФФЕРА */
+.offer-result { background:var(--white); border-radius:var(--r3); border:1.5px solid var(--border); box-shadow:var(--shadow-md); padding:32px 32px 28px; margin-bottom:20px; transition:opacity .5s; }
+.offer-result-head { display:flex; align-items:center; gap:12px; margin-bottom:22px; }
+.offer-result-icon { width:44px; height:44px; border-radius:12px; background:var(--teal-light); display:flex; align-items:center; justify-content:center; font-size:20px; }
+.offer-result-title { font-family:'Exo 2',sans-serif; font-size:17px; font-weight:800; color:var(--text); }
+.offer-result-sub { font-size:12px; color:var(--text-3); margin-top:1px; }
+.offer-compiled { background:#F8FAFF; border:1.5px solid #D1DCF5; border-radius:var(--r2); padding:20px 22px; font-size:14px; line-height:1.8; color:var(--text); margin-bottom:18px; min-height:80px; }
+.placeholder-txt { color:var(--text-3); font-style:italic; font-size:13px; }
+.t-blue{color:var(--blue);font-weight:600;} .t-teal{color:var(--teal);font-weight:600;} .t-pink{color:var(--pink);font-weight:600;} .t-amber{color:var(--amber);font-weight:600;}
+.btn-copy { display:inline-flex; align-items:center; gap:8px; padding:11px 26px; background:var(--white); color:var(--blue); border:1.5px solid var(--blue); border-radius:24px; font-family:'Exo 2',sans-serif; font-size:12px; font-weight:700; letter-spacing:.06em; cursor:pointer; transition:all .2s; }
+.btn-copy:hover{background:var(--blue);color:#fff;}
+.btn-copy:active{transform:scale(.97);}
+.btn-copy.copied{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+/* ФИНАЛ */
+.finale { background:linear-gradient(148deg,#091828 0%,#163356 100%); border-radius:var(--r4); padding:44px 36px; color:#fff; text-align:center; margin-bottom:20px; position:relative; overflow:hidden; transition:opacity .5s; }
+.finale::before { content:''; position:absolute; top:-50px; right:-50px; width:220px; height:220px; border-radius:50%; background:radial-gradient(circle,rgba(13,148,136,.28) 0%,transparent 70%); pointer-events:none; }
+.finale h2 { font-family:'Exo 2',sans-serif; font-size:24px; font-weight:800; margin-bottom:10px; position:relative; }
+.finale p { font-size:14px; color:rgba(255,255,255,.68); max-width:440px; margin:0 auto 28px; line-height:1.65; position:relative; }
+.finale-list { list-style:none; display:flex; flex-direction:column; gap:10px; text-align:left; max-width:400px; margin:0 auto 30px; position:relative; }
+.finale-list li { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); border-radius:var(--r1); padding:11px 15px; display:flex; align-items:center; gap:10px; font-size:13px; line-height:1.45; }
+.finale-check { width:20px; height:20px; border-radius:50%; background:var(--teal); display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; }
+.btn-finish { display:inline-flex; align-items:center; gap:8px; padding:14px 38px; background:var(--teal); color:#fff; border:none; border-radius:28px; font-family:'Exo 2',sans-serif; font-size:13px; font-weight:800; letter-spacing:.07em; cursor:pointer; transition:background .2s,transform .15s; position:relative; }
+.btn-finish:hover{background:#0F766E;}
+.btn-finish:active{transform:scale(.97);}
+
+/* DIVIDER */
+.divider{height:1px;background:#F0F4FA;margin:20px 0;}
+
+/* CONFETTI */
+#confetti-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; display:none; }
+
+@media(max-width:560px){
+  .header{padding:32px 22px 28px;} .header h1{font-size:22px;}
+  .section{padding:22px 18px 20px;} .offer-result{padding:22px 18px;}
+  .finale{padding:32px 20px;} .seq-inner{padding:14px 14px 16px;}
+}
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+<div class="wrap">
+
+<!-- ШАПКА -->
+<div class="header">
+  <div class="h-eye">Занятие 7 · Мастер-группа</div>
+  <h1>Формула оффера:<br>от точки А к точке Б</h1>
+  <div class="header-sub">Пошаговая практика: вы составляете свой оффер прямо здесь — и получаете готовый текст для отправки на проверку.</div>
+  <div class="chips">
+    <span class="chip">⏱ ~20 мин</span>
+    <span class="chip">4 блока</span>
+    <span class="chip">Ввод ответов</span>
+    <span class="chip">Квиз</span>
+  </div>
+</div>
+
+<!-- ПРОГРЕСС -->
+<div class="prog-card">
+  <div class="prog-top">
+    <span class="prog-lbl">Прогресс</span>
+    <span class="prog-pct" id="pct-lbl">0%</span>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  <div class="prog-dots">
+    <div class="pdot" id="pd0"><div class="pdot-circle"></div><div class="pdot-lbl">Контекст</div></div>
+    <div class="pdot" id="pd1"><div class="pdot-circle"></div><div class="pdot-lbl">Точка А</div></div>
+    <div class="pdot" id="pd2"><div class="pdot-circle"></div><div class="pdot-lbl">Точка Б</div></div>
+    <div class="pdot" id="pd3"><div class="pdot-circle"></div><div class="pdot-lbl">Формула</div></div>
+    <div class="pdot" id="pd4"><div class="pdot-circle"></div><div class="pdot-lbl">Финал</div></div>
+  </div>
+</div>
+
+<!-- БЛОК 1 -->
+<div class="section">
+  <div class="sec-head">
+    <div class="sec-icon si-pink">🚫</div>
+    <div><div class="sec-num">Блок 1</div><div class="sec-title">Почему нет продаж</div></div>
+  </div>
+  <div class="insight pink">
+    <div class="ins-bar"></div>
+    <div><div class="ins-lbl">Главная причина</div><div class="ins-txt">Размытый оффер и работа с неплатёжеспособной аудиторией. Не контент плохой — фундамент шатается. Оффер — это 10% контента, которые дают 80% продаж.</div></div>
+  </div>
+  <div class="baf">
+    <div class="baf-b baf-before"><div class="baf-lbl">❌ Размытый оффер</div><div class="baf-txt">«Помогаю увеличить продажи через контент экспертам и предпринимателям, которым нужно больше продаж»</div></div>
+    <div class="baf-b baf-after"><div class="baf-lbl">✓ Конкретный оффер</div><div class="baf-txt">«Помогаю опытным экспертам создать дорогой премиальный продукт и делать 3–10 продаж в месяц через авторские смыслы»</div></div>
+  </div>
+  <div class="insight amber">
+    <div class="ins-bar"></div>
+    <div><div class="ins-lbl">Результат смены оффера</div><div class="ins-txt">С размытым — едва 300 тыс./мес. С конкретным — больше миллиона при той же аудитории. Конкретность продаёт.</div></div>
+  </div>
+  <div class="divider"></div>
+  <div class="quiz-q">Проверьте понимание: какой из офферов — платёжеспособный?</div>
+  <div class="quiz-opts" id="q1-opts">
+    <button class="quiz-opt" onclick="quiz(this,'q1',false,'q1-fb')">«Помогаю женщинам стать счастливее и гармоничнее»</button>
+    <button class="quiz-opt" onclick="quiz(this,'q1',false,'q1-fb')">«Развитие женственности и внутренней силы»</button>
+    <button class="quiz-opt" onclick="quiz(this,'q1',true,'q1-fb')">«Успешным женщинам 35+, которые ходят на свидания, но никак не складывается — помогаю встретить достойного мужчину»</button>
+    <button class="quiz-opt" onclick="quiz(this,'q1',false,'q1-fb')">«7 ключей к здоровью и балансу»</button>
+  </div>
+  <div class="quiz-fb" id="q1-fb"></div>
+</div>
+
+<!-- БЛОК 2 -->
+<div class="section">
+  <div class="sec-head">
+    <div class="sec-icon si-blue">📍</div>
+    <div><div class="sec-num">Блок 2</div><div class="sec-title">Точка А — внешний запрос</div></div>
+  </div>
+  <div class="insight blue">
+    <div class="ins-bar"></div>
+    <div><div class="ins-lbl">Что такое точка А</div><div class="ins-txt">Конкретная внешняя ситуация клиента прямо сейчас. Лежит в плоскости: деньги, отношения или здоровье. То, что человек сам называет своей проблемой — можно пощупать, увидеть, измерить.</div></div>
+  </div>
+  <div class="accordion" id="acc-a">
+    <div class="acc-item" id="acc-a-0">
+      <button class="acc-btn" onclick="acc('acc-a',0)">❌ Типичная ошибка: слишком широко<span class="acc-chevron">▼</span></button>
+      <div class="acc-body"><div class="acc-inner">«Проблемы с деньгами», «хочу в отношения», «устала» — под это описание подходит любой человек. Такой оффер не притягивает — он размывается.
+        <div class="insight pink"><div class="ins-bar"></div><div><div class="ins-lbl">Правило</div><div class="ins-txt">Добавьте одно слово «успешная» — и сразу отсекаете неплатёжеспособных. Конкретика — это деньги.</div></div></div>
+      </div></div>
+    </div>
+    <div class="acc-item" id="acc-a-1">
+      <button class="acc-btn" onclick="acc('acc-a',1)">❌ Типичная ошибка: внутренние формулировки<span class="acc-chevron">▼</span></button>
+      <div class="acc-body"><div class="acc-inner">«Духовное пробуждение», «соединение с высшим Я», «внутренняя гармония» — это не точка А. Точка А — то, что видно снаружи.
+        <div class="insight amber"><div class="ins-bar"></div><div><div class="ins-lbl">Проверка</div><div class="ins-txt">Спросите себя: «Это можно пощупать или увидеть снаружи?» Нет — значит, не точка А.</div></div></div>
+      </div></div>
+    </div>
+    <div class="acc-item" id="acc-a-2">
+      <button class="acc-btn" onclick="acc('acc-a',2)">❌ Типичная ошибка: все аудитории сразу<span class="acc-chevron">▼</span></button>
+      <div class="acc-body"><div class="acc-inner">«Работаю с теми, кто хочет денег, и с теми, у кого проблемы в семье, и с теми, кто ищет себя» — это ни для кого. Выберите одну аудиторию для одного оффера.</div></div>
+    </div>
+  </div>
+  <div class="insight teal">
+    <div class="ins-bar"></div>
+    <div><div class="ins-lbl">Примеры сильной точки А</div><div class="ins-txt">«Я люблю своего мужчину, но пропала близость, доверие и интерес — мне важно это вернуть.» · «Я опытный эксперт, недоволен доходом с блога и уровнем клиентов.» · «Успешная женщина, недавно развелась, в тяжёлом эмоциональном состоянии.»</div></div>
+  </div>
+</div>
+
+<!-- БЛОК 3 -->
+<div class="section">
+  <div class="sec-head">
+    <div class="sec-icon si-teal">🎯</div>
+    <div><div class="sec-num">Блок 3</div><div class="sec-title">Точка Б — внешний результат</div></div>
+  </div>
+  <div class="insight teal">
+    <div class="ins-bar"></div>
+    <div><div class="ins-lbl">Ключевое правило</div><div class="ins-txt">Точка Б — реалистичный, измеримый внешний результат. Не «внутренняя гармония», а то, что человек сможет ощутить, увидеть и назвать другому человеку.</div></div>
+  </div>
+  <div class="cards-grid">
+    <div class="cg-card pink"><div class="cg-icon">🚫</div><div class="cg-title">Не пишем</div><div class="cg-desc">«Встретить любовь всей жизни» · «Духовное пробуждение» · «Внутренняя гармония» · «Выйти на миллион в первый месяц»</div></div>
+    <div class="cg-card teal"><div class="cg-icon">✅</div><div class="cg-title">Пишем</div><div class="cg-desc">«Снова ходить на свидания с мужчинами, которые вам нравятся» · «Разработать премиальный продукт и собрать первую группу с чеком от 100 тыс.»</div></div>
+  </div>
+  <div class="insight amber">
+    <div class="ins-bar"></div>
+    <div><div class="ins-lbl">Почему реализм важнее обещаний</div><div class="ins-txt">Аудитория наелась лживых обещаний. Реалистичный конкретный результат продаёт лучше, чем громкое обещание невозможного.</div></div>
+  </div>
+  <div class="divider"></div>
+  <div class="quiz-q">Проверьте понимание: что из этого — правильная точка Б?</div>
+  <div class="quiz-opts" id="q2-opts">
+    <button class="quiz-opt" onclick="quiz(this,'q2',false,'q2-fb')">«Достигнете внутренней гармонии и найдёте баланс»</button>
+    <button class="quiz-opt" onclick="quiz(this,'q2',true,'q2-fb')">«Разработаете премиальный продукт и соберёте первую группу с чеком от 100 тыс.»</button>
+    <button class="quiz-opt" onclick="quiz(this,'q2',false,'q2-fb')">«Завершите болезненный сценарий своего рода»</button>
+    <button class="quiz-opt" onclick="quiz(this,'q2',false,'q2-fb')">«Выйдете на стабильный миллион уже в первый месяц»</button>
+  </div>
+  <div class="quiz-fb" id="q2-fb"></div>
+</div>
+
+<!-- БЛОК 4: ПРАКТИКА -->
+<div class="section">
+  <div class="sec-head">
+    <div class="sec-icon si-amber">✍️</div>
+    <div><div class="sec-num">Блок 4</div><div class="sec-title">Составьте свой оффер</div></div>
+  </div>
+  <div class="formula-block">
+    <div class="formula-eye">Формула оффера</div>
+    <div class="formula-eq">
+      <span class="f-var">Кто я</span><span class="f-op">+</span><span class="f-var">Для кого (точка А)</span><span class="f-op">+</span><span class="f-var">Куда приведу (точка Б)</span><span class="f-op">+</span><span class="f-var">Как (формат + фишка)</span>
+    </div>
+  </div>
+  <div class="insight blue">
+    <div class="ins-bar"></div>
+    <div><div class="ins-lbl">Пример готового оффера</div><div class="ins-txt">«Я, Анастасия, контент-маркетолог. Помогаю опытным экспертам, недовольным доходом с блога, создать дорогой премиальный продукт и делать 3–10 продаж в месяц — через 3 месяца работы в моей группе по созданию авторских смыслов.»</div></div>
+  </div>
+  <div class="insight pink">
+    <div class="ins-bar"></div>
+    <div><div class="ins-lbl">Как работает этот блок</div><div class="ins-txt">Заполните каждый шаг — и внизу автоматически соберётся ваш оффер. Его можно скопировать и отправить на проверку одной кнопкой.</div></div>
+  </div>
+
+  <!-- STEPS -->
+  <div id="seq">
+
+    <div class="seq-step active" id="s0">
+      <div class="seq-hd">
+        <div class="seq-badge">1</div>
+        <div class="seq-ttl">Кто вы — имя и роль</div>
+        <span class="seq-mark">✓</span>
+      </div>
+      <div class="seq-bd"><div class="seq-inner">
+        <div class="insight blue"><div class="ins-bar"></div><div><div class="ins-lbl">Подсказка</div><div class="ins-txt">Напишите своё имя и профессиональную роль. Например: «Я, Мария, семейный психолог» или «Я, Алексей, нутрициолог».</div></div></div>
+        <div class="field-wrap">
+          <label class="field-label" for="f-who">Ваше имя и роль</label>
+          <div class="field-hint">Например: «Я, Мария, семейный психолог»</div>
+          <textarea class="field-input" id="f-who" placeholder="Я, [имя], [кто вы]…" oninput="onInput(this,'f-who',0); updateOffer()" maxlength="120"></textarea>
+          <div class="field-ctr" id="fc-who">0 / 120</div>
+        </div>
+        <button class="btn-done" id="btn-s0" onclick="stepDone(0)" disabled>Далее →</button>
+      </div></div>
+    </div>
+
+    <div class="seq-step" id="s1">
+      <div class="seq-hd">
+        <div class="seq-badge">2</div>
+        <div class="seq-ttl">Точка А — аудитория и её боль</div>
+        <span class="seq-mark">✓</span>
+      </div>
+      <div class="seq-bd"><div class="seq-inner">
+        <div class="insight blue"><div class="ins-bar"></div><div><div class="ins-lbl">Подсказка</div><div class="ins-txt">Опишите конкретного клиента: кто он, что происходит в его жизни прямо сейчас. Начните с уточняющего слова — «успешная», «опытный», «уже зарабатывает». Одна аудитория, одна боль.</div></div></div>
+        <div class="field-wrap">
+          <label class="field-label" for="f-a">Точка А — кто ваш клиент и что его беспокоит</label>
+          <div class="field-hint">Например: «Опытных экспертов, которые недовольны доходом с блога и уровнем клиентов»</div>
+          <textarea class="field-input" id="f-a" placeholder="Помогаю [кому]…, которые [ситуация / боль]…" oninput="onInput(this,'f-a',1); updateOffer()" maxlength="220"></textarea>
+          <div class="field-ctr" id="fc-a">0 / 220</div>
+        </div>
+        <button class="btn-done" id="btn-s1" onclick="stepDone(1)" disabled>Далее →</button>
+      </div></div>
+    </div>
+
+    <div class="seq-step" id="s2">
+      <div class="seq-hd">
+        <div class="seq-badge">3</div>
+        <div class="seq-ttl">Точка Б — конкретный результат</div>
+        <span class="seq-mark">✓</span>
+      </div>
+      <div class="seq-bd"><div class="seq-inner">
+        <div class="insight teal"><div class="ins-bar"></div><div><div class="ins-lbl">Подсказка</div><div class="ins-txt">Что получит клиент? Реалистично и измеримо. Внешнее — то, что можно увидеть и потрогать. Не «гармония», а «снова ходит на свидания».</div></div></div>
+        <div class="field-wrap">
+          <label class="field-label" for="f-b">Точка Б — результат работы с вами</label>
+          <div class="field-hint">Например: «Создать премиальный продукт и собрать первую группу с чеком от 100 тыс.»</div>
+          <textarea class="field-input" id="f-b" placeholder="[Конкретный результат, который можно увидеть или измерить]…" oninput="onInput(this,'f-b',2); updateOffer()" maxlength="220"></textarea>
+          <div class="field-ctr" id="fc-b">0 / 220</div>
+        </div>
+        <button class="btn-done" id="btn-s2" onclick="stepDone(2)" disabled>Далее →</button>
+      </div></div>
+    </div>
+
+    <div class="seq-step" id="s3">
+      <div class="seq-hd">
+        <div class="seq-badge">4</div>
+        <div class="seq-ttl">Как — формат и ваша фишка</div>
+        <span class="seq-mark">✓</span>
+      </div>
+      <div class="seq-bd"><div class="seq-inner">
+        <div class="insight amber"><div class="ins-bar"></div><div><div class="ins-lbl">Подсказка</div><div class="ins-txt">Через что клиент получает результат? Укажите формат работы и любую особенность вашего метода. Если пока не знаете свою «суперсилу» — напишите то, что уже знаете о себе.</div></div></div>
+        <div class="field-wrap">
+          <label class="field-label" for="f-how">Формат и метод</label>
+          <div class="field-hint">Например: «Через 3 месяца работы в моей премиальной группе по созданию авторских смыслов»</div>
+          <textarea class="field-input" id="f-how" placeholder="Через [формат работы] по [вашему методу / подходу]…" oninput="onInput(this,'f-how',3); updateOffer()" maxlength="220"></textarea>
+          <div class="field-ctr" id="fc-how">0 / 220</div>
+        </div>
+        <button class="btn-done" id="btn-s3" onclick="stepDone(3)" disabled>Далее →</button>
+      </div></div>
+    </div>
+
+  </div><!-- /seq -->
+</div>
+
+<!-- РЕЗУЛЬТАТ -->
+<div class="offer-result" id="offer-result-block" style="opacity:.35;pointer-events:none;">
+  <div class="offer-result-head">
+    <div class="offer-result-icon">📋</div>
+    <div>
+      <div class="offer-result-title">Ваш оффер</div>
+      <div class="offer-result-sub">Скопируйте и отправьте на проверку</div>
+    </div>
+  </div>
+  <div class="offer-compiled" id="offer-compiled">
+    <span class="placeholder-txt">Заполните все 4 шага выше — оффер соберётся здесь автоматически.</span>
+  </div>
+  <button class="btn-copy" id="btn-copy" onclick="copyOffer()">
+    <span id="copy-ico">⎘</span><span id="copy-txt"> Скопировать оффер</span>
+  </button>
+</div>
+
+<!-- ФИНАЛ -->
+<div class="finale" id="finale" style="opacity:.35;pointer-events:none;">
+  <h2>🎉 Оффер готов!</h2>
+  <p>Вы прошли все шаги и составили свой первый рабочий оффер. Это фундамент — без него весь контент работает вхолостую.</p>
+  <ul class="finale-list">
+    <li><span class="finale-check">✓</span>Понимаете разницу между размытым и конкретным оффером</li>
+    <li><span class="finale-check">✓</span>Умеете формулировать точку А — внешний запрос клиента</li>
+    <li><span class="finale-check">✓</span>Умеете формулировать точку Б — реалистичный внешний результат</li>
+    <li><span class="finale-check">✓</span>Составили собственный оффер по формуле</li>
+  </ul>
+  <button class="btn-finish" id="btn-finish" onclick="finish()">Завершить урок 🚀</button>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// ПРОГРЕСС
+const TOTAL = 8; // 4 steps + 2 quizzes + copy + finish
+let cnt = 0;
+const thresholds = [{id:'pd0',at:0},{id:'pd1',at:1},{id:'pd2',at:3},{id:'pd3',at:5},{id:'pd4',at:8}];
+function addP() {
+  cnt = Math.min(TOTAL, cnt + 1);
+  const pct = Math.round(cnt / TOTAL * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('pct-lbl').textContent = pct + '%';
+  thresholds.forEach(t => { if (cnt >= t.at && t.at > 0) document.getElementById(t.id).classList.add('done'); });
+}
+
+// КВИЗ
+function quiz(btn, groupId, correct, fbId) {
+  document.querySelectorAll('#' + groupId + '-opts .quiz-opt').forEach(b => { b.disabled = true; b.style.pointerEvents = 'none'; });
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className = 'quiz-fb show ok';
+    fb.textContent = '✅ Верно! Конкретная аудитория + конкретная боль + конкретный результат — вот что продаёт.';
+    addP();
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'quiz-fb show err';
+    fb.textContent = '❌ Не совсем. Правильный ответ — третий: конкретный человек с конкретной болью и конкретным желаемым результатом.';
+  }
+}
+
+// АККОРДЕОН
+function acc(groupId, idx) {
+  const grp = document.getElementById(groupId);
+  grp.querySelectorAll('.acc-item').forEach((item, i) => {
+    const body = item.querySelector('.acc-body');
+    if (i === idx) {
+      const open = item.classList.contains('open');
+      item.classList.toggle('open', !open);
+      body.style.maxHeight = open ? '0' : body.scrollHeight + 'px';
+    } else {
+      item.classList.remove('open');
+      item.querySelector('.acc-body').style.maxHeight = '0';
+    }
+  });
+}
+
+// ПОЛЯ
+const maxLens = {'f-who':120,'f-a':220,'f-b':220,'f-how':220};
+const ctrSuffix = {'f-who':'who','f-a':'a','f-b':'b','f-how':'how'};
+const btnMap = {'f-who':'btn-s0','f-a':'btn-s1','f-b':'btn-s2','f-how':'btn-s3'};
+function onInput(el, id) {
+  const val = el.value.trim();
+  const max = maxLens[id];
+  const suf = ctrSuffix[id];
+  const ctr = document.getElementById('fc-' + suf);
+  ctr.textContent = val.length + ' / ' + max;
+  ctr.className = 'field-ctr' + (val.length > max * .9 ? ' warn' : '');
+  el.classList.toggle('filled', val.length > 0);
+  document.getElementById(btnMap[id]).disabled = val.length < 3;
+}
+
+// SEQUENTIAL STEPS
+let seqCount = 0;
+function stepDone(idx) {
+  document.getElementById('s' + idx).classList.remove('active');
+  document.getElementById('s' + idx).classList.add('done');
+  addP();
+  seqCount++;
+  const next = document.getElementById('s' + (idx + 1));
+  if (next) {
+    setTimeout(() => {
+      next.classList.add('active');
+      next.scrollIntoView({behavior:'smooth',block:'center'});
+    }, 300);
+  }
+  updateOffer();
+  if (seqCount >= 4) {
+    setTimeout(() => {
+      const rb = document.getElementById('offer-result-block');
+      rb.style.opacity = '1'; rb.style.pointerEvents = 'auto';
+      const fin = document.getElementById('finale');
+      fin.style.opacity = '1'; fin.style.pointerEvents = 'auto';
+      setTimeout(() => rb.scrollIntoView({behavior:'smooth',block:'start'}), 100);
+    }, 400);
+  }
+}
+
+// СБОРКА ОФФЕРА
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function updateOffer() {
+  const who = (document.getElementById('f-who')||{}).value||'';
+  const a   = (document.getElementById('f-a')||{}).value||'';
+  const b   = (document.getElementById('f-b')||{}).value||'';
+  const how = (document.getElementById('f-how')||{}).value||'';
+  const box = document.getElementById('offer-compiled');
+  if (!who.trim() && !a.trim() && !b.trim() && !how.trim()) {
+    box.innerHTML = '<span class="placeholder-txt">Заполните все 4 шага выше — оффер соберётся здесь автоматически.</span>';
+    return;
+  }
+  const wc = who.trim() || '[ваше имя и роль]';
+  const ac = a.trim()   || '[ваша аудитория и её ситуация]';
+  const bc = b.trim()   || '[конкретный результат]';
+  const hc = how.trim() || '[ваш формат и метод]';
+  box.innerHTML =
+    '<span class="t-blue">' + esc(wc) + '</span>. ' +
+    esc(ac) + ' — ' +
+    '<span class="t-teal">' + esc(bc) + '</span> ' +
+    '<span class="t-amber">' + esc(hc) + '</span>.';
+}
+
+// КОПИРОВАНИЕ
+function getPlainText() {
+  const who = (document.getElementById('f-who')||{}).value||'';
+  const a   = (document.getElementById('f-a')||{}).value||'';
+  const b   = (document.getElementById('f-b')||{}).value||'';
+  const how = (document.getElementById('f-how')||{}).value||'';
+  return [who.trim(), a.trim(), '—', b.trim(), how.trim()].filter(Boolean).join(' ') + '.';
+}
+function copyOffer() {
+  const text = getPlainText();
+  const doIt = () => {
+    const btn = document.getElementById('btn-copy');
+    document.getElementById('copy-ico').textContent = '✓';
+    document.getElementById('copy-txt').textContent = ' Скопировано!';
+    btn.classList.add('copied');
+    addP();
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      document.getElementById('copy-ico').textContent = '⎘';
+      document.getElementById('copy-txt').textContent = ' Скопировать оффер';
+    }, 2500);
+  };
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(doIt).catch(() => fallbackCopy(text, doIt));
+  } else { fallbackCopy(text, doIt); }
+}
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+  document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  cb();
+}
+
+// ФИНИШ + КОНФЕТТИ
+function finish() {
+  addP();
+  const btn = document.getElementById('btn-finish');
+  btn.disabled = true; btn.textContent = '🎊 Отличная работа!';
+  confetti();
+}
+function confetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.style.display = 'block';
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  const COLORS = ['#2563EB','#DB2777','#0D9488','#D97706','#93C5FD','#6EE7D4'];
+  const parts = Array.from({length:120}, () => ({
+    x: Math.random()*canvas.width, y: -10-Math.random()*120,
+    r: 5+Math.random()*7, c: COLORS[Math.floor(Math.random()*COLORS.length)],
+    vx: -2+Math.random()*4, vy: 2+Math.random()*4.5,
+    ang: Math.random()*Math.PI*2, sp: Math.random()*.18-.09
+  }));
+  let t0 = null;
+  function draw(ts) {
+    if (!t0) t0 = ts;
+    const el = ts - t0;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let any = false;
+    parts.forEach(p => {
+      if (p.y < canvas.height+20) {
+        any = true; p.y+=p.vy; p.x+=p.vx; p.ang+=p.sp;
+        ctx.save(); ctx.globalAlpha = Math.max(0, 1-el/3800);
+        ctx.translate(p.x,p.y); ctx.rotate(p.ang);
+        ctx.fillStyle = p.c; ctx.fillRect(-p.r/2,-p.r/3,p.r,p.r*.55);
+        ctx.restore();
+      }
+    });
+    if (any && el < 4200) requestAnimationFrame(draw);
+    else canvas.style.display = 'none';
+  }
+  requestAnimationFrame(draw);
+}
+</script>
+</body>
+</html>
